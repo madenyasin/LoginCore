@@ -18,10 +18,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -33,10 +29,18 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yasinmaden.logincore.R
+import com.yasinmaden.logincore.ui.login.LoginContract.LoginUiAction
+import com.yasinmaden.logincore.ui.login.LoginContract.LoginUiAction.OnEmailChange
+import com.yasinmaden.logincore.ui.login.LoginContract.LoginUiAction.OnPasswordChange
+import com.yasinmaden.logincore.ui.login.LoginContract.LoginUiAction.OnVisibilityChange
+import com.yasinmaden.logincore.ui.login.LoginContract.LoginUiState
 import com.yasinmaden.logincore.ui.theme.LoginCoreTheme
+
 
 @Composable
 fun LoginScreen(
+    uiState: LoginUiState,
+    onAction: (LoginUiAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -47,12 +51,7 @@ fun LoginScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
 
     ) {
-
-        var email by rememberSaveable { mutableStateOf("") }
-        var password by rememberSaveable { mutableStateOf("") }
-        var visibility by rememberSaveable { mutableStateOf(false) }
-
-        val visibilityIcon = if (visibility) {
+        val visibilityIcon = if (uiState.visibility) {
             ImageVector.vectorResource(R.drawable.ic_visibility_on)
         } else {
             ImageVector.vectorResource(R.drawable.ic_visibility_off)
@@ -65,8 +64,8 @@ fun LoginScreen(
         )
 
         OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
+            value = uiState.email,
+            onValueChange = { onAction(OnEmailChange(it)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -84,8 +83,8 @@ fun LoginScreen(
         )
 
         OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
+            value = uiState.password,
+            onValueChange = { onAction(OnPasswordChange(it)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -93,7 +92,7 @@ fun LoginScreen(
             placeholder = { Text("Enter your password") },
             supportingText = { Text("Enter your password") },
             singleLine = true,
-            visualTransformation = if (visibility) VisualTransformation.None else PasswordVisualTransformation(),
+            visualTransformation = if (uiState.visibility) VisualTransformation.None else PasswordVisualTransformation(),
             leadingIcon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_password),
@@ -102,7 +101,7 @@ fun LoginScreen(
             },
             trailingIcon = {
                 IconButton(
-                    onClick = { visibility = !visibility }
+                    onClick = { onAction(OnVisibilityChange) }
                 ) {
                     Icon(
                         imageVector = visibilityIcon,
@@ -116,12 +115,12 @@ fun LoginScreen(
             )
         )
 
-        Row (
+        Row(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
-        ){
+        ) {
             OutlinedButton(
                 onClick = { TODO("Signup OnClick") },
                 modifier = Modifier
@@ -151,6 +150,9 @@ fun LoginScreen(
 @Preview(showBackground = true)
 fun LoginScreenPreview() {
     LoginCoreTheme {
-        LoginScreen()
+        LoginScreen(
+            uiState = LoginUiState(),
+            onAction = {}
+        )
     }
 }
