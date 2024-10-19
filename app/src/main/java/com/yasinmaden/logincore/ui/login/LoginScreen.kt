@@ -18,9 +18,11 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -28,17 +30,42 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.yasinmaden.logincore.R
+import com.yasinmaden.logincore.navigation.Destinations
 import com.yasinmaden.logincore.ui.login.LoginContract.LoginUiAction
 import com.yasinmaden.logincore.ui.login.LoginContract.LoginUiAction.OnEmailChange
 import com.yasinmaden.logincore.ui.login.LoginContract.LoginUiAction.OnPasswordChange
 import com.yasinmaden.logincore.ui.login.LoginContract.LoginUiAction.OnVisibilityChange
 import com.yasinmaden.logincore.ui.login.LoginContract.LoginUiState
+import com.yasinmaden.logincore.ui.login.LoginContract.UiEffect
 import com.yasinmaden.logincore.ui.theme.LoginCoreTheme
-
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 @Composable
 fun LoginScreen(
+    uiState: LoginUiState,
+    uiEffect: Flow<UiEffect>,
+    onAction: (LoginUiAction) -> Unit,
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
+
+    HandleLoginUiEffects(
+        uiEffect = uiEffect,
+        navController = navController
+    )
+
+    LoginContent(
+        uiState = uiState,
+        onAction = onAction,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun LoginContent(
     uiState: LoginUiState,
     onAction: (LoginUiAction) -> Unit,
     modifier: Modifier = Modifier
@@ -49,8 +76,8 @@ fun LoginScreen(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
-
     ) {
+
         val visibilityIcon = if (uiState.visibility) {
             ImageVector.vectorResource(R.drawable.ic_visibility_on)
         } else {
@@ -122,7 +149,7 @@ fun LoginScreen(
             horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
         ) {
             OutlinedButton(
-                onClick = { TODO("Signup OnClick") },
+                onClick = { onAction(LoginUiAction.OnSignUpClick) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
@@ -130,7 +157,14 @@ fun LoginScreen(
                 Text(text = "Sign Up")
             }
             Button(
-                onClick = { TODO("Login OnClick") },
+                onClick = {
+                    onAction(
+                        LoginUiAction.OnLoginClick(
+                            email = uiState.email,
+                            password = uiState.password
+                        )
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
@@ -142,7 +176,23 @@ fun LoginScreen(
                 Text(text = "Login")
             }
         }
+    }
+}
 
+@Composable
+fun HandleLoginUiEffects(
+    uiEffect: Flow<UiEffect>,
+    navController: NavController
+)
+{
+    LaunchedEffect(Unit) {
+        uiEffect.collect { effect ->
+            when (effect) {
+                UiEffect.NavigateToSignUp -> {
+                    navController.navigate(Destinations.SignUp.route)
+                }
+            }
+        }
     }
 }
 
@@ -152,7 +202,9 @@ fun LoginScreenPreview() {
     LoginCoreTheme {
         LoginScreen(
             uiState = LoginUiState(),
-            onAction = {}
+            onAction = {},
+            uiEffect = flow { },
+            navController = NavController(LocalContext.current)
         )
     }
 }
