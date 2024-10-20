@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -91,7 +93,8 @@ fun SignupContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(top = 64.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
+            .padding(top = 64.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Top)
     ) {
@@ -114,13 +117,13 @@ fun SignupContent(
             onAction = onAction
         )
         SignupHaveAnAccountText(onAction = onAction)
-        
+
     }
 }
 
 @Composable
 @Preview(showBackground = true)
-fun SignUpScreenPreview() {
+fun SignupScreenPreview() {
     SignupScreen(
         uiState = SignupContract.UiState(),
         uiEffect = flow { },
