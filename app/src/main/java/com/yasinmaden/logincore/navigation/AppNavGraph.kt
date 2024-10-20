@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import com.yasinmaden.logincore.ui.login.LoginScreen
 import com.yasinmaden.logincore.ui.login.LoginViewModel
 import com.yasinmaden.logincore.ui.signup.SignUpScreen
+import com.yasinmaden.logincore.ui.signup.SignUpViewModel
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
@@ -18,10 +19,12 @@ fun AppNavGraph(navController: NavHostController) {
         startDestination = Destinations.Login.route
     ) {
         composable(route = Destinations.Login.route) {
+
             val viewModel: LoginViewModel = viewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val onAction = viewModel::onAction
             val uiEffect = viewModel.uiEffect
+
             LoginScreen(
                 uiState = uiState,
                 onAction = onAction,
@@ -30,7 +33,18 @@ fun AppNavGraph(navController: NavHostController) {
             )
         }
         composable(route = Destinations.SignUp.route) {
-            SignUpScreen()
+
+            val viewModel: SignUpViewModel = viewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val onAction = viewModel::onAction
+            val uiEffect = viewModel.uiEffect
+
+            SignUpScreen(
+                uiState = uiState,
+                onAction = onAction,
+                uiEffect = uiEffect,
+                navController = navController
+            )
         }
     }
 }

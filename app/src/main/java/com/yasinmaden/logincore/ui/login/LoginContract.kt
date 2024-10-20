@@ -11,11 +11,11 @@ object LoginContract {
         data class OnEmailChange(val email: String) : LoginUiAction()
         data class OnPasswordChange(val password: String) : LoginUiAction()
         data class OnLoginClick(val email: String, val password: String) : LoginUiAction()
-        data object OnVisibilityChange : LoginUiAction()
-        data object OnSignUpClick : LoginUiAction()
+        object OnVisibilityChange : LoginUiAction()
+        object OnSignUpClick : LoginUiAction()
     }
 
     sealed class UiEffect {
-        data object NavigateToSignUp : UiEffect()
+        object NavigateToSignUp : UiEffect()
     }
 }
