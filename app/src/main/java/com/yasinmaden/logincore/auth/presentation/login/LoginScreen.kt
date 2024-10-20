@@ -1,4 +1,4 @@
-package com.yasinmaden.logincore.ui.login
+package com.yasinmaden.logincore.auth.presentation.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,12 +33,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.yasinmaden.logincore.R
 import com.yasinmaden.logincore.navigation.Destinations
-import com.yasinmaden.logincore.ui.login.LoginContract.LoginUiAction
-import com.yasinmaden.logincore.ui.login.LoginContract.LoginUiAction.OnEmailChange
-import com.yasinmaden.logincore.ui.login.LoginContract.LoginUiAction.OnPasswordChange
-import com.yasinmaden.logincore.ui.login.LoginContract.LoginUiAction.OnVisibilityChange
-import com.yasinmaden.logincore.ui.login.LoginContract.LoginUiState
-import com.yasinmaden.logincore.ui.login.LoginContract.UiEffect
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiAction
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiAction.OnEmailChange
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiAction.OnPasswordChange
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiAction.OnVisibilityChange
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiState
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiEffect
 import com.yasinmaden.logincore.ui.theme.LoginCoreTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

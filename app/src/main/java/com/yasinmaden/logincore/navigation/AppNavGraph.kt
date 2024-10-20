@@ -7,10 +7,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.yasinmaden.logincore.ui.login.LoginScreen
-import com.yasinmaden.logincore.ui.login.LoginViewModel
-import com.yasinmaden.logincore.ui.signup.SignUpScreen
-import com.yasinmaden.logincore.ui.signup.SignUpViewModel
+import com.yasinmaden.logincore.auth.presentation.login.LoginScreen
+import com.yasinmaden.logincore.auth.presentation.login.LoginViewModel
+import com.yasinmaden.logincore.auth.presentation.signup.SignUpScreen
+import com.yasinmaden.logincore.auth.presentation.signup.SignUpViewModel
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {

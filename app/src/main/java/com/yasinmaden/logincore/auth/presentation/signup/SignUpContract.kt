@@ -1,4 +1,4 @@
-package com.yasinmaden.logincore.ui.signup
+package com.yasinmaden.logincore.auth.presentation.signup
 
 object SignUpContract {
     data class UiState(

@@ -1,10 +1,10 @@
-package com.yasinmaden.logincore.ui.login
+package com.yasinmaden.logincore.auth.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yasinmaden.logincore.ui.login.LoginContract.LoginUiAction
-import com.yasinmaden.logincore.ui.login.LoginContract.LoginUiState
-import com.yasinmaden.logincore.ui.login.LoginContract.UiEffect
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiAction
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiState
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiEffect
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

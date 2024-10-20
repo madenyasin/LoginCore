@@ -1,4 +1,4 @@
-package com.yasinmaden.logincore.ui.login
+package com.yasinmaden.logincore.auth.presentation.login
 
 object LoginContract {
     data class LoginUiState(

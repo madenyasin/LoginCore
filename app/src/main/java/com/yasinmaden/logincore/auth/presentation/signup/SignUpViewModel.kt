@@ -1,4 +1,4 @@
-package com.yasinmaden.logincore.ui.signup
+package com.yasinmaden.logincore.auth.presentation.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
