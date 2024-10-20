@@ -27,13 +27,11 @@ class LoginViewModel : ViewModel() {
                     copy(email = uiAction.email)
                 }
             }
-
             is LoginUiAction.OnPasswordChange -> {
                 updateUiState {
                     copy(password = uiAction.password)
                 }
             }
-
             LoginUiAction.OnVisibilityChange -> {
                 updateUiState {
                     copy(
@@ -41,8 +39,9 @@ class LoginViewModel : ViewModel() {
                     )
                 }
             }
-
-            is LoginUiAction.OnLoginClick -> TODO()
+            is LoginUiAction.OnLoginClick -> {
+                // todo: implement login logic
+            }
             LoginUiAction.OnSignUpClick -> viewModelScope.launch {
                 sendUiEffect(UiEffect.NavigateToSignUp)
             }
