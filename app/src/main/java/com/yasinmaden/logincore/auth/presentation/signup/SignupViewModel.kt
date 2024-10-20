@@ -9,52 +9,52 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SignUpViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(SignUpContract.UiState())
+class SignupViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow(SignupContract.UiState())
     val uiState = _uiState.asStateFlow()
 
-    private val _uiEffect by lazy { Channel<SignUpContract.UiEffect>() }
+    private val _uiEffect by lazy { Channel<SignupContract.UiEffect>() }
     val uiEffect by lazy { _uiEffect.receiveAsFlow() }
 
-    fun onAction(uiAction: SignUpContract.UiAction){
+    fun onAction(uiAction: SignupContract.UiAction){
         when(uiAction){
-            is SignUpContract.UiAction.OnEmailChange -> {
+            is SignupContract.UiAction.OnEmailChange -> {
                 _uiState.update {
                     it.copy(email = uiAction.email)
                 }
             }
-            is SignUpContract.UiAction.OnConfirmPasswordChange -> {
+            is SignupContract.UiAction.OnConfirmPasswordChange -> {
                 _uiState.update {
                     it.copy(confirmPassword = uiAction.confirmPassword)
                 }
             }
-            is SignUpContract.UiAction.OnPasswordChange -> {
+            is SignupContract.UiAction.OnPasswordChange -> {
                 _uiState.update {
                     it.copy(password = uiAction.password)
                 }
             }
-            is SignUpContract.UiAction.OnNameChange -> {
+            is SignupContract.UiAction.OnNameChange -> {
                 _uiState.update {
                     it.copy(name = uiAction.name)
                 }
             }
-            is SignUpContract.UiAction.OnSignUpClick -> {
+            is SignupContract.UiAction.OnSignUpClick -> {
                 // TODO: Implement sign up logic
             }
 
-            SignUpContract.UiAction.OnPasswordVisibilityChange -> {
+            SignupContract.UiAction.OnPasswordVisibilityChange -> {
                 _uiState.update {
                     it.copy(passwordVisibility = !_uiState.value.passwordVisibility)
                 }
             }
-            SignUpContract.UiAction.OnConfirmPasswordVisibilityChange -> {
+            SignupContract.UiAction.OnConfirmPasswordVisibilityChange -> {
                 _uiState.update {
                     it.copy(confirmPasswordVisibility = !_uiState.value.confirmPasswordVisibility)
                 }
             }
 
-            SignUpContract.UiAction.OnSignInTextClick -> viewModelScope.launch{
-                _uiEffect.send(SignUpContract.UiEffect.OnNavigateToLoginScreen)
+            SignupContract.UiAction.OnSignInTextClick -> viewModelScope.launch{
+                _uiEffect.send(SignupContract.UiEffect.OnNavigateToLoginScreen)
             }
         }
     }

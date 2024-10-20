@@ -35,7 +35,7 @@ class LoginViewModel : ViewModel() {
             LoginUiAction.OnVisibilityChange -> {
                 updateUiState {
                     copy(
-                        visibility = !_uiState.value.visibility
+                        passwordVisibility = !_uiState.value.passwordVisibility
                     )
                 }
             }
@@ -44,6 +44,39 @@ class LoginViewModel : ViewModel() {
             }
             LoginUiAction.OnSignUpClick -> viewModelScope.launch {
                 sendUiEffect(UiEffect.NavigateToSignUp)
+            }
+
+            LoginUiAction.OnForgotPasswordTextClick -> {
+                _uiState.update {
+                    it.copy(
+                        resetPasswordDialogVisibility = !_uiState.value.resetPasswordDialogVisibility
+                    )
+                }
+            }
+
+            LoginUiAction.OnResetPasswordDialogConfirm -> {
+                // todo: implement send reset password logic
+            }
+            LoginUiAction.OnResetPasswordDialogDismiss -> {
+                _uiState.update {
+                    it.copy(
+                        resetPasswordDialogVisibility = false
+                    )
+                }
+            }
+            LoginUiAction.OnResetPasswordDialogDismissRequest -> {
+                _uiState.update {
+                    it.copy(
+                        resetPasswordDialogVisibility = false
+                    )
+                }
+            }
+            is LoginUiAction.OnResetPasswordEmailChange -> {
+                _uiState.update {
+                    it.copy(
+                        resetPasswordEmail = uiAction.email
+                    )
+                }
             }
         }
     }

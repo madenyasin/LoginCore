@@ -1,6 +1,6 @@
 package com.yasinmaden.logincore.auth.presentation.signup
 
-object SignUpContract {
+object SignupContract {
     data class UiState(
         val name: String = "",
         val email: String = "",
