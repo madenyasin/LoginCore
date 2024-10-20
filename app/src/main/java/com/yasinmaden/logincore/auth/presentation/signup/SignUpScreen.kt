@@ -38,7 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.yasinmaden.logincore.R
-import com.yasinmaden.logincore.navigation.Destinations
+import com.yasinmaden.logincore.util.Constants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -72,9 +72,9 @@ fun HandleSignUpUiEffect(
         uiEffect.collect { effect ->
             when (effect) {
                 SignUpContract.UiEffect.OnNavigateToLoginScreen -> {
-                    navController.navigate(Destinations.Login.route) {
+                    navController.navigate(Constants.Destinations.Login.route) {
                         launchSingleTop = true
-                        popUpTo(Destinations.SignUp.route) {
+                        popUpTo(Constants.Destinations.SignUp.route) {
                             inclusive = true
                         }
                     }
@@ -254,7 +254,7 @@ fun SignUpContent(
                 append("Already have an account? ")
                 withLink(
                     link = LinkAnnotation.Clickable(
-                        tag = ClickableLink.SignIn.tag,
+                        tag = Constants.ClickableLink.SignIn.tag,
                         styles = TextLinkStyles(
                             style = SpanStyle(
                                 fontWeight = FontWeight.Bold

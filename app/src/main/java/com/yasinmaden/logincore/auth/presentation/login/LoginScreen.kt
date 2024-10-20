@@ -32,7 +32,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.yasinmaden.logincore.R
-import com.yasinmaden.logincore.navigation.Destinations
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiAction
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiAction.OnEmailChange
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiAction.OnPasswordChange
@@ -40,6 +39,7 @@ import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiAct
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiState
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiEffect
 import com.yasinmaden.logincore.ui.theme.LoginCoreTheme
+import com.yasinmaden.logincore.util.Constants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -189,7 +189,7 @@ fun HandleLoginUiEffects(
         uiEffect.collect { effect ->
             when (effect) {
                 UiEffect.NavigateToSignUp -> {
-                    navController.navigate(Destinations.SignUp.route)
+                    navController.navigate(Constants.Destinations.SignUp.route)
                 }
             }
         }
