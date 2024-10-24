@@ -13,12 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract
-import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiAction
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiAction
 
 @Composable
 fun LoginButtonSection(
-    uiState: LoginContract.LoginUiState,
-    onAction: (LoginUiAction) -> Unit,
+    uiState: LoginContract.UiState,
+    onAction: (UiAction) -> Unit,
     modifier: Modifier = Modifier,
 ){
     Row(
@@ -28,7 +28,7 @@ fun LoginButtonSection(
         horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
     ) {
         OutlinedButton(
-            onClick = { onAction(LoginUiAction.OnSignUpClick) },
+            onClick = { onAction(UiAction.OnSignUpClick) },
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
@@ -38,7 +38,7 @@ fun LoginButtonSection(
         Button(
             onClick = {
                 onAction(
-                    LoginUiAction.OnLoginClick(
+                    UiAction.OnLoginClick(
                         email = uiState.email,
                         password = uiState.password
                     )

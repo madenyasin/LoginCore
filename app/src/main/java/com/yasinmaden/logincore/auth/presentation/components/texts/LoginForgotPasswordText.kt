@@ -9,12 +9,12 @@ import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withLink
-import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiAction
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiAction
 import com.yasinmaden.logincore.util.Constants
 
 @Composable
 fun LoginForgotPasswordText(
-    onAction: (LoginUiAction) -> Unit,
+    onAction: (UiAction) -> Unit,
     modifier: Modifier = Modifier,
 ){
     Text(
@@ -27,7 +27,7 @@ fun LoginForgotPasswordText(
                             fontWeight = FontWeight.Bold
                         )
                     ),
-                    linkInteractionListener = { onAction(LoginUiAction.OnForgotPasswordTextClick) }
+                    linkInteractionListener = { onAction(UiAction.OnForgotPasswordTextClick) }
                 )
             ) {
                 append("Forgot your password?")

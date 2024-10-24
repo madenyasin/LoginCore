@@ -2,8 +2,8 @@ package com.yasinmaden.logincore.auth.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiAction
-import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiState
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiAction
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiState
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiEffect
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,74 +14,45 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
 
-    private val _uiState = MutableStateFlow(LoginUiState())
+    private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
 
     private val _uiEffect by lazy { Channel<UiEffect>() }
     val uiEffect by lazy { _uiEffect.receiveAsFlow() }
 
-    fun onAction(uiAction: LoginUiAction) {
+    fun onAction(uiAction: UiAction) {
         when (uiAction) {
-            is LoginUiAction.OnEmailChange -> {
-                updateUiState {
-                    copy(email = uiAction.email)
-                }
-            }
-            is LoginUiAction.OnPasswordChange -> {
-                updateUiState {
-                    copy(password = uiAction.password)
-                }
-            }
-            LoginUiAction.OnVisibilityChange -> {
-                updateUiState {
-                    copy(
-                        passwordVisibility = !_uiState.value.passwordVisibility
-                    )
-                }
-            }
-            is LoginUiAction.OnLoginClick -> {
-                // todo: implement login logic
-            }
-            LoginUiAction.OnSignUpClick -> viewModelScope.launch {
-                sendUiEffect(UiEffect.NavigateToSignUp)
+
+            is UiAction.OnEmailChange -> updateUiState { copy(email = uiAction.email) }
+
+            is UiAction.OnPasswordChange -> updateUiState { copy(password = uiAction.password) }
+
+            UiAction.OnVisibilityChange -> updateUiState { copy(passwordVisibility = !_uiState.value.passwordVisibility) }
+
+            UiAction.OnSignUpClick -> viewModelScope.launch { sendUiEffect(UiEffect.NavigateToSignUp) }
+
+            UiAction.OnForgotPasswordTextClick -> updateUiState {
+                copy(
+                    resetPasswordDialogVisibility = !_uiState.value.resetPasswordDialogVisibility
+                )
             }
 
-            LoginUiAction.OnForgotPasswordTextClick -> {
-                _uiState.update {
-                    it.copy(
-                        resetPasswordDialogVisibility = !_uiState.value.resetPasswordDialogVisibility
-                    )
-                }
-            }
+            UiAction.OnResetPasswordDialogDismiss -> updateUiState { copy(resetPasswordDialogVisibility = false) }
 
-            LoginUiAction.OnResetPasswordDialogConfirm -> {
+            UiAction.OnResetPasswordDialogDismissRequest -> updateUiState { copy(resetPasswordDialogVisibility = false) }
+
+            is UiAction.OnResetPasswordEmailChange -> updateUiState { copy(resetPasswordEmail = uiAction.email) }
+            UiAction.OnResetPasswordDialogConfirm -> {
                 // todo: implement send reset password logic
             }
-            LoginUiAction.OnResetPasswordDialogDismiss -> {
-                _uiState.update {
-                    it.copy(
-                        resetPasswordDialogVisibility = false
-                    )
-                }
-            }
-            LoginUiAction.OnResetPasswordDialogDismissRequest -> {
-                _uiState.update {
-                    it.copy(
-                        resetPasswordDialogVisibility = false
-                    )
-                }
-            }
-            is LoginUiAction.OnResetPasswordEmailChange -> {
-                _uiState.update {
-                    it.copy(
-                        resetPasswordEmail = uiAction.email
-                    )
-                }
+
+            is UiAction.OnLoginClick -> {
+                // todo: implement login logic
             }
         }
     }
 
-    private fun updateUiState(block: LoginUiState.() -> LoginUiState) {
+    private fun updateUiState(block: UiState.() -> UiState) {
         _uiState.update(block)
     }
 

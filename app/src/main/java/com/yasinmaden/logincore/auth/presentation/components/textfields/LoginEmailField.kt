@@ -14,12 +14,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract
-import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiAction.OnEmailChange
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiAction.OnEmailChange
 
 @Composable
 fun LoginEmailField(
-    uiState: LoginContract.LoginUiState,
-    onAction: (LoginContract.LoginUiAction) -> Unit,
+    uiState: LoginContract.UiState,
+    onAction: (LoginContract.UiAction) -> Unit,
     modifier: Modifier = Modifier
 ){
     OutlinedTextField(

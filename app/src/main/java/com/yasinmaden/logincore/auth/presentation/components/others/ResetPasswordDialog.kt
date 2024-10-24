@@ -16,12 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract
-import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiAction
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiAction
 
 @Composable
 fun ResetPasswordDialog(
-    uiState: LoginContract.LoginUiState,
-    onAction: (LoginUiAction) -> Unit,
+    uiState: LoginContract.UiState,
+    onAction: (UiAction) -> Unit,
     modifier: Modifier = Modifier,
 ){
     AlertDialog(
@@ -29,7 +29,7 @@ fun ResetPasswordDialog(
         text = {
             OutlinedTextField(
                 value = uiState.resetPasswordEmail,
-                onValueChange = { onAction(LoginUiAction.OnResetPasswordEmailChange(it)) },
+                onValueChange = { onAction(UiAction.OnResetPasswordEmailChange(it)) },
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text(text = "Email") },
                 placeholder = { Text(text = "Enter your email") },
@@ -55,18 +55,18 @@ fun ResetPasswordDialog(
         },
         confirmButton = {
             Button(
-                onClick = { onAction(LoginUiAction.OnResetPasswordDialogConfirm) }
+                onClick = { onAction(UiAction.OnResetPasswordDialogConfirm) }
             ) {
                 Text(text = "Send")
             }
         },
         dismissButton = {
             OutlinedButton(
-                onClick = { onAction(LoginUiAction.OnResetPasswordDialogDismiss) }
+                onClick = { onAction(UiAction.OnResetPasswordDialogDismiss) }
             ) {
                 Text(text = "Cancel")
             }
         },
-        onDismissRequest = { onAction(LoginUiAction.OnResetPasswordDialogDismissRequest) },
+        onDismissRequest = { onAction(UiAction.OnResetPasswordDialogDismissRequest) },
     )
 }

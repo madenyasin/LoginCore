@@ -20,8 +20,8 @@ import com.yasinmaden.logincore.auth.presentation.components.textfields.LoginEma
 import com.yasinmaden.logincore.auth.presentation.components.texts.LoginForgotPasswordText
 import com.yasinmaden.logincore.auth.presentation.components.textfields.LoginPasswordField
 import com.yasinmaden.logincore.auth.presentation.components.others.ResetPasswordDialog
-import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiAction
-import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiState
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiAction
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiState
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiEffect
 import com.yasinmaden.logincore.ui.theme.LoginCoreTheme
 import com.yasinmaden.logincore.util.Constants
@@ -30,9 +30,9 @@ import kotlinx.coroutines.flow.flow
 
 @Composable
 fun LoginScreen(
-    uiState: LoginUiState,
+    uiState: UiState,
     uiEffect: Flow<UiEffect>,
-    onAction: (LoginUiAction) -> Unit,
+    onAction: (UiAction) -> Unit,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
@@ -51,8 +51,8 @@ fun LoginScreen(
 
 @Composable
 fun LoginContent(
-    uiState: LoginUiState,
-    onAction: (LoginUiAction) -> Unit,
+    uiState: UiState,
+    onAction: (UiAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -97,7 +97,7 @@ fun HandleLoginUiEffects(
 fun LoginScreenPreview() {
     LoginCoreTheme {
         LoginScreen(
-            uiState = LoginUiState(),
+            uiState = UiState(),
             onAction = {},
             uiEffect = flow { },
             navController = NavController(LocalContext.current)

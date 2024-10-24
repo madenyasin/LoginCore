@@ -18,13 +18,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.yasinmaden.logincore.R
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract
-import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiAction.OnPasswordChange
-import com.yasinmaden.logincore.auth.presentation.login.LoginContract.LoginUiAction.OnVisibilityChange
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiAction.OnPasswordChange
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiAction.OnVisibilityChange
 
 @Composable
 fun LoginPasswordField(
-    uiState: LoginContract.LoginUiState,
-    onAction: (LoginContract.LoginUiAction) -> Unit,
+    uiState: LoginContract.UiState,
+    onAction: (LoginContract.UiAction) -> Unit,
     modifier: Modifier = Modifier,
 ){
     val visibilityIcon = if (uiState.passwordVisibility) {
