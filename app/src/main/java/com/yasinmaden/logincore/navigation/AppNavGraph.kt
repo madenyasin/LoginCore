@@ -11,15 +11,14 @@ import com.yasinmaden.logincore.auth.presentation.login.LoginScreen
 import com.yasinmaden.logincore.auth.presentation.login.LoginViewModel
 import com.yasinmaden.logincore.auth.presentation.signup.SignupScreen
 import com.yasinmaden.logincore.auth.presentation.signup.SignupViewModel
-import com.yasinmaden.logincore.util.Constants
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Constants.Destinations.Login.route
+        startDestination = Screen.Login.route
     ) {
-        composable(route = Constants.Destinations.Login.route) {
+        composable(route = Screen.Login.route) {
 
             val viewModel: LoginViewModel = viewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -33,7 +32,7 @@ fun AppNavGraph(navController: NavHostController) {
                 navController = navController
             )
         }
-        composable(route = Constants.Destinations.SignUp.route) {
+        composable(route = Screen.Signup.route) {
 
             val viewModel: SignupViewModel = viewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()

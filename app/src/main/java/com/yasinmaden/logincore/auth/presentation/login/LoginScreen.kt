@@ -23,6 +23,7 @@ import com.yasinmaden.logincore.auth.presentation.components.others.ResetPasswor
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiAction
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiState
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiEffect
+import com.yasinmaden.logincore.navigation.Screen
 import com.yasinmaden.logincore.ui.theme.LoginCoreTheme
 import com.yasinmaden.logincore.util.Constants
 import kotlinx.coroutines.flow.Flow
@@ -85,7 +86,7 @@ fun HandleLoginUiEffects(
         uiEffect.collect { effect ->
             when (effect) {
                 UiEffect.NavigateToSignUp -> {
-                    navController.navigate(Constants.Destinations.SignUp.route)
+                    navController.navigate(Screen.Signup.route)
                 }
             }
         }

@@ -24,6 +24,7 @@ import com.yasinmaden.logincore.auth.presentation.components.textfields.SignupEm
 import com.yasinmaden.logincore.auth.presentation.components.textfields.SignupNameField
 import com.yasinmaden.logincore.auth.presentation.components.textfields.SignupPasswordField
 import com.yasinmaden.logincore.auth.presentation.components.texts.SignupHaveAnAccountText
+import com.yasinmaden.logincore.navigation.Screen
 import com.yasinmaden.logincore.util.Constants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -58,9 +59,9 @@ fun HandleSignupUiEffect(
         uiEffect.collect { effect ->
             when (effect) {
                 SignupContract.UiEffect.OnNavigateToLoginScreen -> {
-                    navController.navigate(Constants.Destinations.Login.route) {
+                    navController.navigate(Screen.Login.route) {
                         launchSingleTop = true
-                        popUpTo(Constants.Destinations.SignUp.route) {
+                        popUpTo(Screen.Signup.route) {
                             inclusive = true
                         }
                     }
