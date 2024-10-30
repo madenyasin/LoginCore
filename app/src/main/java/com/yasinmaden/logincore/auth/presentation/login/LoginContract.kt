@@ -1,6 +1,7 @@
 package com.yasinmaden.logincore.auth.presentation.login
 
 object LoginContract {
+
     data class UiState(
         val email: String = "",
         val password: String = "",
@@ -20,13 +21,10 @@ object LoginContract {
         object OnResetPasswordDialogConfirm : UiAction()
         object OnResetPasswordDialogDismiss : UiAction()
         object OnResetPasswordDialogDismissRequest : UiAction()
-
-
-
-
     }
 
     sealed class UiEffect {
         object NavigateToSignUp : UiEffect()
+        object NavigateToHome : UiEffect()
     }
 }

@@ -88,6 +88,14 @@ fun HandleLoginUiEffects(
                 UiEffect.NavigateToSignUp -> {
                     navController.navigate(Screen.Signup.route)
                 }
+
+                UiEffect.NavigateToHome -> {
+                    navController.navigate(Screen.Home.route){
+                        popUpTo(Screen.Login.route){
+                            inclusive = true
+                        }
+                    }
+                }
             }
         }
     }

@@ -46,8 +46,8 @@ class LoginViewModel : ViewModel() {
                 // todo: implement send reset password logic
             }
 
-            is UiAction.OnLoginClick -> {
-                // todo: implement login logic
+            is UiAction.OnLoginClick -> viewModelScope.launch {
+                sendUiEffect(UiEffect.NavigateToHome)
             }
         }
     }
