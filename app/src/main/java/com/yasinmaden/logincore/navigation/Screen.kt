@@ -20,5 +20,10 @@ sealed class Screen(
         title = "signup",
         route = "signup",
     )
+    object Settings : Screen(
+        title = "Settings",
+        route = "settings",
+    )
+
 
 }

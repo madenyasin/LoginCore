@@ -11,9 +11,13 @@ import com.yasinmaden.logincore.auth.presentation.login.LoginScreen
 import com.yasinmaden.logincore.auth.presentation.login.LoginViewModel
 import com.yasinmaden.logincore.auth.presentation.signup.SignupScreen
 import com.yasinmaden.logincore.auth.presentation.signup.SignupViewModel
-import com.yasinmaden.logincore.main.home.HomeScreen
+import com.yasinmaden.logincore.main.presentation.home.HomeScreen
 import com.yasinmaden.logincore.main.presentation.components.NavBarItems
-import com.yasinmaden.logincore.main.profile.ProfileScreen
+import com.yasinmaden.logincore.main.presentation.home.HomeViewModel
+import com.yasinmaden.logincore.main.presentation.profile.ProfileScreen
+import com.yasinmaden.logincore.main.presentation.profile.ProfileViewModel
+import com.yasinmaden.logincore.main.presentation.settings.SettingsScreen
+import com.yasinmaden.logincore.main.presentation.settings.SettingsViewModel
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
@@ -51,18 +55,43 @@ fun AppNavGraph(navController: NavHostController) {
         }
 
         composable(route = Screen.Home.route){
-            HomeScreen()
+            val viewModel: HomeViewModel = viewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val onAction = viewModel::onAction
+            val uiEffect = viewModel.uiEffect
+
+            HomeScreen(
+                uiState = uiState,
+                onAction = onAction,
+                uiEffect = uiEffect,
+                navController = navController
+            )
         }
 
         composable(route = Screen.Profile.route){
+            val viewModel: ProfileViewModel = viewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val onAction = viewModel::onAction
+            val uiEffect = viewModel.uiEffect
             ProfileScreen(
-                logout = {
-                    navController.navigate(Screen.Login.route){
-                        popUpTo(Screen.Login.route){
-                            inclusive = true
-                        }
-                    }
-                }
+                uiState = uiState,
+                onAction = onAction,
+                uiEffect = uiEffect,
+                navController = navController
+            )
+        }
+
+        composable(route = Screen.Settings.route){
+            val viewModel: SettingsViewModel = viewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+            val onAction = viewModel::onAction
+            val uiEffect = viewModel.uiEffect
+
+            SettingsScreen(
+                uiState = uiState,
+                onAction = onAction,
+                uiEffect = uiEffect,
+                navController = navController
             )
         }
     }

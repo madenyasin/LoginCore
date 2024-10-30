@@ -3,8 +3,10 @@ package com.yasinmaden.logincore.main.presentation.components
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class NavBarItems(
@@ -26,10 +28,17 @@ sealed class NavBarItems(
         selectedIcon = Icons.Filled.Person,
         unselectedIcon = Icons.Outlined.Person,
     )
+
+    object Settings : NavBarItems(
+        title = "Settings",
+        route = "settings",
+        selectedIcon = Icons.Filled.Settings,
+        unselectedIcon = Icons.Outlined.Settings
+    )
 }
 
 val navBarItems = listOf(
     NavBarItems.Home,
     NavBarItems.Profile,
-
-    )
+    NavBarItems.Settings,
+)
