@@ -28,5 +28,6 @@ object LoginContract {
 
     sealed class UiEffect {
         object NavigateToSignUp : UiEffect()
+        object NavigateToHome : UiEffect()
     }
 }

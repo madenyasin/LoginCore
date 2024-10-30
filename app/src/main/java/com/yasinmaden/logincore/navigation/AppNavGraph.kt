@@ -11,6 +11,9 @@ import com.yasinmaden.logincore.auth.presentation.login.LoginScreen
 import com.yasinmaden.logincore.auth.presentation.login.LoginViewModel
 import com.yasinmaden.logincore.auth.presentation.signup.SignupScreen
 import com.yasinmaden.logincore.auth.presentation.signup.SignupViewModel
+import com.yasinmaden.logincore.main.home.HomeScreen
+import com.yasinmaden.logincore.main.presentation.components.NavBarItems
+import com.yasinmaden.logincore.main.profile.ProfileScreen
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
@@ -44,6 +47,22 @@ fun AppNavGraph(navController: NavHostController) {
                 onAction = onAction,
                 uiEffect = uiEffect,
                 navController = navController
+            )
+        }
+
+        composable(route = Screen.Home.route){
+            HomeScreen()
+        }
+
+        composable(route = Screen.Profile.route){
+            ProfileScreen(
+                logout = {
+                    navController.navigate(Screen.Login.route){
+                        popUpTo(Screen.Login.route){
+                            inclusive = true
+                        }
+                    }
+                }
             )
         }
     }

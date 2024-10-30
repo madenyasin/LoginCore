@@ -6,42 +6,32 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
 fun NavBar(
-    selectedItem: Int,
-    currentRoute: String?,
-    onItemClick: (Int, NavBarItems) -> Unit
+    navController: NavHostController,
+    onItemClick: (NavBarItems) -> Unit,
 ) {
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
+
     if (navBarItems.any { it.route == currentRoute }) {
-    NavigationBar {
-        navBarItems.forEachIndexed { index, item ->
-            NavigationBarItem(
-                selected = selectedItem == index,
-                onClick = { onItemClick(index, item) },
-                icon = {
-                    Icon(
-                        imageVector = if (selectedItem == index) item.selectedIcon else item.unselectedIcon,
-                        contentDescription = item.title
-                    )
-                },
-                label = { Text(item.title) }
-            )
+        NavigationBar {
+            navBarItems.forEachIndexed {_, item ->
+                NavigationBarItem(
+                    selected = currentRoute == item.route,
+                    onClick = { onItemClick(item) },
+                    icon = {
+                        Icon(
+                            imageVector = if (currentRoute == item.route) item.selectedIcon else item.unselectedIcon,
+                            contentDescription = item.title
+                        )
+                    },
+                    label = { Text(item.title) }
+                )
+            }
         }
     }
-    }
-}
-
-
-@Composable
-@Preview(showBackground = true)
-fun NavBarPreview() {
-    var selectedItem by remember { mutableStateOf(0) }
-    NavBar(selectedItem, currentRoute = "home", onItemClick = { index, item ->
-        selectedItem = index
-    })
 }
