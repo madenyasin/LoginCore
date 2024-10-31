@@ -8,15 +8,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.yasinmaden.logincore.main.presentation.components.NavBar
 import com.yasinmaden.logincore.navigation.AppNavGraph
 import com.yasinmaden.logincore.ui.theme.LoginCoreTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,10 +32,9 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             onItemClick = {item->
                                 navController.navigate(item.route) {
-                                    popUpTo(item.route) { inclusive = true } // Önceki kopyaları temizle
+                                    popUpTo(item.route) { inclusive = true }
                                     launchSingleTop = true
-                                    restoreState = true // Önceki durum korunur
-                                    //todo: doğru mu tam bilmiyorum
+                                    restoreState = true
                                 }
                             }
                         )

@@ -2,8 +2,8 @@ package com.yasinmaden.logincore.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,7 +12,6 @@ import com.yasinmaden.logincore.auth.presentation.login.LoginViewModel
 import com.yasinmaden.logincore.auth.presentation.signup.SignupScreen
 import com.yasinmaden.logincore.auth.presentation.signup.SignupViewModel
 import com.yasinmaden.logincore.main.presentation.home.HomeScreen
-import com.yasinmaden.logincore.main.presentation.components.NavBarItems
 import com.yasinmaden.logincore.main.presentation.home.HomeViewModel
 import com.yasinmaden.logincore.main.presentation.profile.ProfileScreen
 import com.yasinmaden.logincore.main.presentation.profile.ProfileViewModel
@@ -27,7 +26,7 @@ fun AppNavGraph(navController: NavHostController) {
     ) {
         composable(route = Screen.Login.route) {
 
-            val viewModel: LoginViewModel = viewModel()
+            val viewModel: LoginViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val onAction = viewModel::onAction
             val uiEffect = viewModel.uiEffect
@@ -41,7 +40,7 @@ fun AppNavGraph(navController: NavHostController) {
         }
         composable(route = Screen.Signup.route) {
 
-            val viewModel: SignupViewModel = viewModel()
+            val viewModel: SignupViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val onAction = viewModel::onAction
             val uiEffect = viewModel.uiEffect
@@ -55,7 +54,7 @@ fun AppNavGraph(navController: NavHostController) {
         }
 
         composable(route = Screen.Home.route){
-            val viewModel: HomeViewModel = viewModel()
+            val viewModel: HomeViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val onAction = viewModel::onAction
             val uiEffect = viewModel.uiEffect
@@ -69,7 +68,7 @@ fun AppNavGraph(navController: NavHostController) {
         }
 
         composable(route = Screen.Profile.route){
-            val viewModel: ProfileViewModel = viewModel()
+            val viewModel: ProfileViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val onAction = viewModel::onAction
             val uiEffect = viewModel.uiEffect
@@ -82,7 +81,7 @@ fun AppNavGraph(navController: NavHostController) {
         }
 
         composable(route = Screen.Settings.route){
-            val viewModel: SettingsViewModel = viewModel()
+            val viewModel: SettingsViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val onAction = viewModel::onAction
             val uiEffect = viewModel.uiEffect
