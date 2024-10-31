@@ -6,14 +6,19 @@ import com.yasinmaden.logincore.auth.presentation.signup.SignupContract.UiAction
 import com.yasinmaden.logincore.auth.presentation.signup.SignupContract.UiEffect
 import com.yasinmaden.logincore.auth.presentation.signup.SignupContract.UiEffect.OnNavigateToLoginScreen
 import com.yasinmaden.logincore.auth.presentation.signup.SignupContract.UiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SignupViewModel : ViewModel() {
+@HiltViewModel
+class SignupViewModel @Inject constructor(
+
+): ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
 

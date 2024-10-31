@@ -5,14 +5,19 @@ import androidx.lifecycle.viewModelScope
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiAction
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiState
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiEffect
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
@@ -37,9 +42,17 @@ class LoginViewModel : ViewModel() {
                 )
             }
 
-            UiAction.OnResetPasswordDialogDismiss -> updateUiState { copy(resetPasswordDialogVisibility = false) }
+            UiAction.OnResetPasswordDialogDismiss -> updateUiState {
+                copy(
+                    resetPasswordDialogVisibility = false
+                )
+            }
 
-            UiAction.OnResetPasswordDialogDismissRequest -> updateUiState { copy(resetPasswordDialogVisibility = false) }
+            UiAction.OnResetPasswordDialogDismissRequest -> updateUiState {
+                copy(
+                    resetPasswordDialogVisibility = false
+                )
+            }
 
             is UiAction.OnResetPasswordEmailChange -> updateUiState { copy(resetPasswordEmail = uiAction.email) }
             UiAction.OnResetPasswordDialogConfirm -> {

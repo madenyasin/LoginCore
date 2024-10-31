@@ -3,13 +3,18 @@ package com.yasinmaden.logincore.main.presentation.home
 import androidx.lifecycle.ViewModel
 import com.yasinmaden.logincore.main.presentation.home.HomeContract.UiEffect
 import com.yasinmaden.logincore.main.presentation.home.HomeContract.UiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+
+) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
 
