@@ -29,6 +29,8 @@ object SignupContract {
     }
 
     sealed class UiEffect() {
+        data class ShowToast(val message: String) : UiEffect()
+        data object NavigateToHome : UiEffect()
         object OnNavigateToLoginScreen : UiEffect()
     }
 }
