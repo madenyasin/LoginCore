@@ -2,7 +2,7 @@ package com.yasinmaden.logincore.auth.presentation.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yasinmaden.common.Resource
+import com.yasinmaden.logincore.common.Resource
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract
 import com.yasinmaden.logincore.auth.presentation.signup.SignupContract.UiAction
 import com.yasinmaden.logincore.auth.presentation.signup.SignupContract.UiEffect
@@ -66,7 +66,7 @@ class SignupViewModel @Inject constructor(
     }
 
     private fun signUp() = viewModelScope.launch {
-        when (val result = authRepository.signUp(uiState.value.email, uiState.value.password)) {
+        when (val result = authRepository.signUp(uiState.value.email, uiState.value.password, uiState.value.name)) {
             is Resource.Success -> {
                 sendUiEffect(UiEffect.NavigateToHome)
                 sendUiEffect(UiEffect.ShowToast(result.data))

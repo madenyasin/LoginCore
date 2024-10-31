@@ -3,7 +3,7 @@ package com.yasinmaden.logincore.auth.presentation.login
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yasinmaden.common.Resource
+import com.yasinmaden.logincore.common.Resource
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiAction
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiState
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiEffect

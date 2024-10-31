@@ -1,6 +1,7 @@
-package com.yasinmaden.di
+package com.yasinmaden.logincore.di
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.yasinmaden.logincore.auth.repository.AuthRepository
 import dagger.Module
 import dagger.Provides
@@ -14,6 +15,6 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(auth: FirebaseAuth): AuthRepository = AuthRepository(auth)
+    fun provideAuthRepository(auth: FirebaseAuth, firestore: FirebaseFirestore): AuthRepository = AuthRepository(auth, firestore)
 
 }
