@@ -7,16 +7,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.yasinmaden.logincore.auth.presentation.login.LoginScreen
-import com.yasinmaden.logincore.auth.presentation.login.LoginViewModel
-import com.yasinmaden.logincore.auth.presentation.signup.SignupScreen
-import com.yasinmaden.logincore.auth.presentation.signup.SignupViewModel
-import com.yasinmaden.logincore.main.presentation.home.HomeScreen
-import com.yasinmaden.logincore.main.presentation.home.HomeViewModel
-import com.yasinmaden.logincore.main.presentation.profile.ProfileScreen
-import com.yasinmaden.logincore.main.presentation.profile.ProfileViewModel
-import com.yasinmaden.logincore.main.presentation.settings.SettingsScreen
-import com.yasinmaden.logincore.main.presentation.settings.SettingsViewModel
+import com.yasinmaden.logincore.ui.auth.presentation.login.LoginScreen
+import com.yasinmaden.logincore.ui.auth.presentation.login.LoginViewModel
+import com.yasinmaden.logincore.ui.auth.presentation.signup.SignupScreen
+import com.yasinmaden.logincore.ui.auth.presentation.signup.SignupViewModel
+import com.yasinmaden.logincore.ui.main.presentation.home.HomeScreen
+import com.yasinmaden.logincore.ui.main.presentation.home.HomeViewModel
+import com.yasinmaden.logincore.ui.main.presentation.profile.ProfileScreen
+import com.yasinmaden.logincore.ui.main.presentation.profile.ProfileViewModel
+import com.yasinmaden.logincore.ui.main.presentation.settings.SettingsScreen
+import com.yasinmaden.logincore.ui.main.presentation.settings.SettingsViewModel
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
