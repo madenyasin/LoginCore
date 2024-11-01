@@ -7,9 +7,11 @@ object ProfileContract {
 
     sealed class UiAction {
         object Logout : UiAction()
+
     }
 
     sealed class UiEffect {
+        data class ShowToast(val message: String) : UiEffect()
         object NavigateToLogin : UiEffect()
     }
 }

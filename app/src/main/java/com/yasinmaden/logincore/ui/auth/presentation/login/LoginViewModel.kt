@@ -60,6 +60,7 @@ class LoginViewModel @Inject constructor(
             UiAction.OnResetPasswordDialogConfirm -> sendResetPasswordEmail()
 
             is UiAction.OnLoginClick -> signIn()
+            UiAction.OnGoogleSignInClick -> signInWithGoogle()
         }
     }
 
@@ -89,6 +90,18 @@ class LoginViewModel @Inject constructor(
             is Resource.Success -> {
                 updateUiState { copy(resetPasswordDialogVisibility = false) }
                 sendUiEffect(UiEffect.ShowToast(result.data))
+            }
+            is Resource.Error -> {
+                sendUiEffect(UiEffect.ShowToast(result.exception.message.toString()))
+            }
+        }
+    }
+
+    private fun signInWithGoogle() = viewModelScope.launch {
+        when(val result = authRepository.signInWithGoogle()){
+            is Resource.Success -> {
+                sendUiEffect(UiEffect.ShowToast(result.data))
+                sendUiEffect(UiEffect.NavigateToHome)
             }
             is Resource.Error -> {
                 sendUiEffect(UiEffect.ShowToast(result.exception.message.toString()))

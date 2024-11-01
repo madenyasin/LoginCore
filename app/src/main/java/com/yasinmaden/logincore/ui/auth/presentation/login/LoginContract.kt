@@ -15,6 +15,7 @@ object LoginContract {
         data class OnResetPasswordEmailChange(val email: String) : UiAction()
         data class OnPasswordChange(val password: String) : UiAction()
         data class OnLoginClick(val email: String, val password: String) : UiAction()
+        data object OnGoogleSignInClick: UiAction()
         object OnVisibilityChange : UiAction()
         object OnSignUpClick : UiAction()
         object OnForgotPasswordTextClick : UiAction()

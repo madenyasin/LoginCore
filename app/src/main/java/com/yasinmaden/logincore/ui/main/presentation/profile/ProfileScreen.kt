@@ -1,5 +1,6 @@
 package com.yasinmaden.logincore.ui.main.presentation.profile
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.Flow
@@ -67,15 +69,20 @@ fun HandleProfileUiEffects(
     uiEffect: Flow<ProfileContract.UiEffect>,
     navController: NavController
 ) {
+    val context = LocalContext.current
     LaunchedEffect(true) {
         uiEffect.collect { effect ->
             when (effect) {
                 ProfileContract.UiEffect.NavigateToLogin -> {
-                    navController.navigate("login"){
-                        popUpTo("home"){
+                    navController.navigate("login") {
+                        popUpTo("home") {
                             inclusive = true
                         }
                     }
+                }
+
+                is ProfileContract.UiEffect.ShowToast -> {
+                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
