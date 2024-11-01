@@ -2,6 +2,7 @@ package com.yasinmaden.logincore.ui.main.presentation.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yasinmaden.logincore.common.Resource
 import com.yasinmaden.logincore.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -29,8 +30,16 @@ class ProfileViewModel @Inject constructor(
     }
 
     private fun logout() = viewModelScope.launch {
-        authRepository.logout()
-        sendUiEffect(ProfileContract.UiEffect.NavigateToLogin)
+        when (val result = authRepository.logout()) {
+            is Resource.Success -> {
+                sendUiEffect(ProfileContract.UiEffect.NavigateToLogin)
+                sendUiEffect(ProfileContract.UiEffect.ShowToast(result.data))
+            }
+
+            is Resource.Error -> {
+                sendUiEffect(ProfileContract.UiEffect.ShowToast(result.exception.message.toString()))
+            }
+        }
     }
 
     private fun updateUiState(block: ProfileContract.UiState.() -> ProfileContract.UiState) {
