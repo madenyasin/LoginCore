@@ -1,4 +1,4 @@
-package com.yasinmaden.logincore.auth.repository
+package com.yasinmaden.logincore.repository
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -12,6 +12,7 @@ class AuthRepository @Inject constructor(
 ) {
 
     fun isUserLoggedIn(): Boolean = auth.currentUser != null
+    fun logout() = auth.signOut()
 
 
     suspend fun signUp(email: String, password: String, name: String): Resource<String> {
@@ -47,4 +48,5 @@ class AuthRepository @Inject constructor(
             Resource.Error(e)
         }
     }
+
 }

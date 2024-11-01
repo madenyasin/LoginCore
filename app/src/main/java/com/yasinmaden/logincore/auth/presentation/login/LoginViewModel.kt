@@ -7,7 +7,7 @@ import com.yasinmaden.logincore.common.Resource
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiAction
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiState
 import com.yasinmaden.logincore.auth.presentation.login.LoginContract.UiEffect
-import com.yasinmaden.logincore.auth.repository.AuthRepository
+import com.yasinmaden.logincore.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -64,6 +64,14 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    init {
+        isUserLoggedIn()
+    }
+
+    private fun isUserLoggedIn() = viewModelScope.launch {
+        if (authRepository.isUserLoggedIn())
+            sendUiEffect(UiEffect.NavigateToHome)
+    }
     private fun signIn() = viewModelScope.launch {
         when (val result = authRepository.signIn(uiState.value.email, uiState.value.password)) {
             is Resource.Success -> {

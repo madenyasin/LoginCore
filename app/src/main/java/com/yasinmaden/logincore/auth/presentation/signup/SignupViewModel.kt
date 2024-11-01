@@ -8,7 +8,7 @@ import com.yasinmaden.logincore.auth.presentation.signup.SignupContract.UiAction
 import com.yasinmaden.logincore.auth.presentation.signup.SignupContract.UiEffect
 import com.yasinmaden.logincore.auth.presentation.signup.SignupContract.UiEffect.OnNavigateToLoginScreen
 import com.yasinmaden.logincore.auth.presentation.signup.SignupContract.UiState
-import com.yasinmaden.logincore.auth.repository.AuthRepository
+import com.yasinmaden.logincore.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
