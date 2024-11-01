@@ -14,8 +14,14 @@ activityCompose = "1.9.3"
 composeBom = "2024.10.01"
 lifecycleRuntimeComposeAndroid = "2.8.7"
 navigationCompose = "2.8.3"
+credentials = "1.5.0-beta01"
+googleid = "1.1.1"
+credentialsPlayServicesAuth = "1.5.0-beta01"
 
 [libraries]
+androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
+googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
+androidx-credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentialsPlayServicesAuth" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
