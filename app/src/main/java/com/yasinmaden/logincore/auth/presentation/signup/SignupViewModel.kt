@@ -2,10 +2,13 @@ package com.yasinmaden.logincore.auth.presentation.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yasinmaden.logincore.common.Resource
+import com.yasinmaden.logincore.auth.presentation.login.LoginContract
 import com.yasinmaden.logincore.auth.presentation.signup.SignupContract.UiAction
 import com.yasinmaden.logincore.auth.presentation.signup.SignupContract.UiEffect
 import com.yasinmaden.logincore.auth.presentation.signup.SignupContract.UiEffect.OnNavigateToLoginScreen
 import com.yasinmaden.logincore.auth.presentation.signup.SignupContract.UiState
+import com.yasinmaden.logincore.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,8 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignupViewModel @Inject constructor(
-
-): ViewModel() {
+    private val authRepository: AuthRepository
+) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
 
@@ -58,10 +61,19 @@ class SignupViewModel @Inject constructor(
                 sendUiEffect(OnNavigateToLoginScreen)
             }
 
-            is UiAction.OnSignUpClick -> {
-                // TODO: Implement sign up logic
-            }
+            is UiAction.OnSignUpClick -> signUp()
         }
+    }
+
+    private fun signUp() = viewModelScope.launch {
+        when (val result = authRepository.signUp(uiState.value.email, uiState.value.password, uiState.value.name)) {
+            is Resource.Success -> {
+                sendUiEffect(UiEffect.NavigateToHome)
+                sendUiEffect(UiEffect.ShowToast(result.data))
+            }
+            is Resource.Error -> sendUiEffect(UiEffect.ShowToast(result.exception.message.toString()))
+        }
+
     }
 
 

@@ -1,5 +1,6 @@
 package com.yasinmaden.logincore.auth.presentation.login
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -82,6 +83,7 @@ fun HandleLoginUiEffects(
     uiEffect: Flow<UiEffect>,
     navController: NavController
 ) {
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
         uiEffect.collect { effect ->
             when (effect) {
@@ -95,6 +97,10 @@ fun HandleLoginUiEffects(
                             inclusive = true
                         }
                     }
+                }
+
+                is UiEffect.ShowToast -> {
+                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
