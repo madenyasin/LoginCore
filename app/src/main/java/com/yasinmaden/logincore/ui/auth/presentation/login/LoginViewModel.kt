@@ -60,6 +60,9 @@ class LoginViewModel @Inject constructor(
             UiAction.OnResetPasswordDialogConfirm -> sendResetPasswordEmail()
 
             is UiAction.OnLoginClick -> signIn()
+            UiAction.OnGoogleSignInClick -> {
+
+            }
         }
     }
 
