@@ -9,6 +9,7 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
+import com.yasinmaden.logincore.R
 import com.yasinmaden.logincore.common.Resource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
@@ -23,8 +24,6 @@ class AuthRepository @Inject constructor(
     private val credentialManager: CredentialManager,
     @ApplicationContext private val context: Context
 ) {
-    val WEB_CLIENT_ID = "539127174452-91c1uh6t89r604ds18igs859k30c57s7.apps.googleusercontent.com"
-
     fun isUserLoggedIn(): Boolean = auth.currentUser != null
 
     suspend fun signIn(email: String, password: String): Resource<String> {
@@ -36,16 +35,22 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun signUp(email: String, password: String, name: String): Resource<String> {
+    suspend fun signUp(
+        email: String,
+        password: String,
+        confirmPassword: String,
+        name: String
+    ): Resource<String> {
+        if (password != confirmPassword) {
+            return Resource.Error(Exception("Passwords do not match"))
+        }
         return try {
             val result = auth.createUserWithEmailAndPassword(email, password).await()
             val uid = result.user?.uid.orEmpty()
 
-            val userMap = hashMapOf(
-                "name" to name,
-                "email" to email
-            )
-            firestore.collection("users").document(uid).set(userMap).await()
+            val saveResult = saveUserToFirestore(name, email)
+            if (saveResult is Resource.Error) return saveResult
+
             Resource.Success(uid)
         } catch (e: Exception) {
             Resource.Error(e)
@@ -86,6 +91,9 @@ class AuthRepository @Inject constructor(
             val firebaseCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
             val authResult = auth.signInWithCredential(firebaseCredential).await()
 
+            val saveResult = saveUserToFirestore()
+            if (saveResult is Resource.Error) return saveResult
+
             Resource.Success(authResult.user?.uid.orEmpty())
         } catch (e: CancellationException) {
             Resource.Error(e)
@@ -93,6 +101,42 @@ class AuthRepository @Inject constructor(
             Resource.Error(e)
         }
 
+    }
+
+    private suspend fun saveUserToFirestore(
+        name: String,
+        email: String
+    ): Resource<String> {
+        return try {
+            val userMap = hashMapOf(
+                "name" to name,
+                "email" to email
+            )
+            firestore.collection("users").document(auth.currentUser?.uid.orEmpty()).set(userMap)
+                .await()
+            Resource.Success("Saved to Firestore")
+        } catch (e: Exception) {
+            Resource.Error(e)
+        }
+
+
+    }
+
+    private suspend fun saveUserToFirestore(): Resource<String> {
+
+        return try {
+            val currentUser = auth.currentUser!!
+            val userMap = hashMapOf(
+                "name" to currentUser.displayName,
+                "email" to currentUser.email,
+                "photoUrl" to currentUser.photoUrl?.toString(),
+            )
+            firestore.collection("users").document(auth.currentUser?.uid.orEmpty()).set(userMap)
+                .await()
+            Resource.Success("Saved to Firestore")
+        } catch (e: Exception) {
+            Resource.Error(e)
+        }
     }
 
     private suspend fun getGoogleIdToken(request: GetCredentialRequest): String {
@@ -119,7 +163,7 @@ class AuthRepository @Inject constructor(
 
         val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)
-            .setServerClientId(WEB_CLIENT_ID)
+            .setServerClientId(context.getString(R.string.WEB_CLIENT_ID))
             .setNonce(nonce)
             .setAutoSelectEnabled(true)
             .build()
