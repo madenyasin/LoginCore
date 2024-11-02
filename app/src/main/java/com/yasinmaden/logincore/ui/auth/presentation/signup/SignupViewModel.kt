@@ -65,11 +65,17 @@ class SignupViewModel @Inject constructor(
     }
 
     private fun signUp() = viewModelScope.launch {
-        when (val result = authRepository.signUp(uiState.value.email, uiState.value.password, uiState.value.name)) {
+        when (val result = authRepository.signUp(
+            uiState.value.email,
+            uiState.value.password,
+            uiState.value.confirmPassword,
+            uiState.value.name
+        )) {
             is Resource.Success -> {
                 sendUiEffect(UiEffect.NavigateToHome)
                 sendUiEffect(UiEffect.ShowToast(result.data))
             }
+
             is Resource.Error -> sendUiEffect(UiEffect.ShowToast(result.exception.message.toString()))
         }
 

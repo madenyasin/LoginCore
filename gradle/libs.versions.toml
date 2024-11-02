@@ -1,7 +1,7 @@
 [versions]
 hilt = "2.52"
 gms = "4.4.2"
-agp = "8.7.1"
+agp = "8.7.2"
 firebaseBom = "33.5.1"
 hiltNavigationCompose = "1.2.0"
 kotlin = "2.0.20"
