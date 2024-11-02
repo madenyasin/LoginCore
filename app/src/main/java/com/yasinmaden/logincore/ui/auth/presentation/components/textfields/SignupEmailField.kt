@@ -30,6 +30,7 @@ fun SignupEmailField(
         placeholder = { Text("Email") },
         supportingText = { Text("Enter your email address") },
         singleLine = true,
+        isError = uiState.isEmailError,
         leadingIcon = {
             Icon(imageVector = Icons.Default.Email, contentDescription = "Email icon")
         },

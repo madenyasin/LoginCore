@@ -72,7 +72,17 @@ class LoginViewModel @Inject constructor(
         if (authRepository.isUserLoggedIn())
             sendUiEffect(UiEffect.NavigateToHome)
     }
+
     private fun signIn() = viewModelScope.launch {
+        updateUiState {
+            copy(
+                isEmailError = uiState.value.email.isEmpty(),
+                isPasswordError = uiState.value.password.isEmpty()
+            )
+        }
+        if (uiState.value.isEmailError || uiState.value.isPasswordError)
+            return@launch
+
         when (val result = authRepository.signIn(uiState.value.email, uiState.value.password)) {
             is Resource.Success -> {
                 sendUiEffect(UiEffect.NavigateToHome)
@@ -86,11 +96,13 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun sendResetPasswordEmail() = viewModelScope.launch {
-        when(val result = authRepository.sendResetPasswordEmail(uiState.value.resetPasswordEmail)){
+        when (val result =
+            authRepository.sendResetPasswordEmail(uiState.value.resetPasswordEmail)) {
             is Resource.Success -> {
                 updateUiState { copy(resetPasswordDialogVisibility = false) }
                 sendUiEffect(UiEffect.ShowToast(result.data))
             }
+
             is Resource.Error -> {
                 sendUiEffect(UiEffect.ShowToast(result.exception.message.toString()))
             }
@@ -98,11 +110,12 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun signInWithGoogle() = viewModelScope.launch {
-        when(val result = authRepository.signInWithGoogle()){
+        when (val result = authRepository.signInWithGoogle()) {
             is Resource.Success -> {
                 sendUiEffect(UiEffect.ShowToast(result.data))
                 sendUiEffect(UiEffect.NavigateToHome)
             }
+
             is Resource.Error -> {
                 sendUiEffect(UiEffect.ShowToast(result.exception.message.toString()))
             }

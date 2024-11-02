@@ -35,6 +35,7 @@ fun SignupPasswordField(
         placeholder = { Text("Password") },
         supportingText = { Text("Enter your password") },
         singleLine = true,
+        isError = uiState.isPasswordError,
         visualTransformation = if (uiState.passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
         leadingIcon = {
             Icon(

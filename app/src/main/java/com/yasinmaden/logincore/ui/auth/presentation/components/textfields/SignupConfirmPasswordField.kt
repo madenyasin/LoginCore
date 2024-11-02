@@ -35,6 +35,7 @@ fun SignupConfirmPasswordField(
         placeholder = { Text("Confirm Password") },
         supportingText = { Text("Confirm your password") },
         singleLine = true,
+        isError = uiState.isConfirmPasswordError,
         visualTransformation = if (uiState.confirmPasswordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
         leadingIcon = {
             Icon(

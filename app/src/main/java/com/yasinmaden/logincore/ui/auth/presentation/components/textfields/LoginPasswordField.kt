@@ -43,6 +43,7 @@ fun LoginPasswordField(
         placeholder = { Text("Enter your password") },
         supportingText = { Text("Enter your password") },
         singleLine = true,
+        isError = uiState.isPasswordError,
         visualTransformation = if (uiState.passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
         leadingIcon = {
             Icon(

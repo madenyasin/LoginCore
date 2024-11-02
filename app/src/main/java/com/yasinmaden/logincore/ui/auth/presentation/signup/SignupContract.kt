@@ -7,7 +7,12 @@ object SignupContract {
         val password: String = "",
         val confirmPassword: String = "",
         val passwordVisibility: Boolean = false,
-        val confirmPasswordVisibility: Boolean = false
+        val confirmPasswordVisibility: Boolean = false,
+        val isNameError: Boolean = false,
+        val isEmailError: Boolean = false,
+        val isPasswordError: Boolean = false,
+        val isConfirmPasswordError: Boolean = false,
+
     )
 
     sealed class UiAction() {
@@ -15,13 +20,8 @@ object SignupContract {
         data class OnEmailChange(val email: String) : UiAction()
         data class OnPasswordChange(val password: String) : UiAction()
         data class OnConfirmPasswordChange(val confirmPassword: String) : UiAction()
-        data class OnSignUpClick(
-            val name: String,
-            val email: String,
-            val password: String,
-            val confirmPassword: String
-        ) : UiAction()
 
+        data object OnSignUpClick : UiAction()
         object OnSignInTextClick: UiAction()
         object OnPasswordVisibilityChange : UiAction()
         object OnConfirmPasswordVisibilityChange : UiAction()

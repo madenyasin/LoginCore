@@ -37,12 +37,7 @@ fun LoginButtonSection(
         }
         Button(
             onClick = {
-                onAction(
-                    UiAction.OnLoginClick(
-                        email = uiState.email,
-                        password = uiState.password
-                    )
-                )
+                onAction(UiAction.OnLoginClick)
             },
             modifier = Modifier
                 .fillMaxWidth()

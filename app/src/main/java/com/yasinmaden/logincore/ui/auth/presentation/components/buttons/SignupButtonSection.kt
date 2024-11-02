@@ -17,14 +17,7 @@ fun SignupButtonSection(
 ){
     Button(
         onClick = {
-            onAction(
-                SignupContract.UiAction.OnSignUpClick(
-                    uiState.name,
-                    uiState.email,
-                    uiState.password,
-                    uiState.confirmPassword
-                )
-            )
+            onAction(SignupContract.UiAction.OnSignUpClick)
         },
         modifier = Modifier
             .fillMaxWidth()

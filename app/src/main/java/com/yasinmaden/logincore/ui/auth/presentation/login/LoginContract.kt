@@ -7,14 +7,16 @@ object LoginContract {
         val password: String = "",
         val resetPasswordEmail: String = "",
         val passwordVisibility: Boolean = false,
-        val resetPasswordDialogVisibility: Boolean = false
+        val resetPasswordDialogVisibility: Boolean = false,
+        val isEmailError: Boolean = false,
+        val isPasswordError: Boolean = false,
     )
 
     sealed class UiAction {
         data class OnEmailChange(val email: String) : UiAction()
         data class OnResetPasswordEmailChange(val email: String) : UiAction()
         data class OnPasswordChange(val password: String) : UiAction()
-        data class OnLoginClick(val email: String, val password: String) : UiAction()
+        data object OnLoginClick : UiAction()
         data object OnGoogleSignInClick: UiAction()
         object OnVisibilityChange : UiAction()
         object OnSignUpClick : UiAction()

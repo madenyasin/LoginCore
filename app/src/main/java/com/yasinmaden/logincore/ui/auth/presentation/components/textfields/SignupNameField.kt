@@ -31,6 +31,7 @@ fun SignupNameField(
         placeholder = { Text("Name") },
         supportingText = { Text("Enter your name") },
         singleLine = true,
+        isError = uiState.isNameError,
         leadingIcon = {
             Icon(imageVector = Icons.Default.Person, contentDescription = "Person icon")
         },

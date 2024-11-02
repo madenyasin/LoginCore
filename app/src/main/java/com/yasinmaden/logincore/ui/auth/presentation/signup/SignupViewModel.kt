@@ -65,6 +65,20 @@ class SignupViewModel @Inject constructor(
     }
 
     private fun signUp() = viewModelScope.launch {
+
+        updateUiState {
+            copy(
+                isNameError = uiState.value.name.isEmpty(),
+                isEmailError = uiState.value.email.isEmpty(),
+                isPasswordError = uiState.value.password.isEmpty(),
+                isConfirmPasswordError = uiState.value.confirmPassword.isEmpty()
+            )
+        }
+
+        if (uiState.value.isNameError || uiState.value.isEmailError || uiState.value.isPasswordError || uiState.value.isConfirmPasswordError) {
+            return@launch
+        }
+
         when (val result = authRepository.signUp(
             uiState.value.email,
             uiState.value.password,

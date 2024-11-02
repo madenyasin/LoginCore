@@ -21,7 +21,7 @@ fun LoginEmailField(
     uiState: LoginContract.UiState,
     onAction: (LoginContract.UiAction) -> Unit,
     modifier: Modifier = Modifier
-){
+) {
     OutlinedTextField(
         value = uiState.email,
         onValueChange = { onAction(OnEmailChange(it)) },
@@ -32,6 +32,7 @@ fun LoginEmailField(
         placeholder = { Text("Enter your email") },
         supportingText = { Text("Enter your email address") },
         singleLine = true,
+        isError = uiState.isEmailError,
         leadingIcon = {
             Icon(imageVector = Icons.Default.Email, contentDescription = "Email icon")
         },
