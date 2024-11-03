@@ -1,5 +1,6 @@
 package com.yasinmaden.logincore.ui.auth.presentation.login
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinmaden.logincore.common.Resource
@@ -60,7 +61,7 @@ class LoginViewModel @Inject constructor(
             UiAction.OnResetPasswordDialogConfirm -> sendResetPasswordEmail()
 
             is UiAction.OnLoginClick -> signIn()
-            UiAction.OnGoogleSignInClick -> signInWithGoogle()
+            is UiAction.OnGoogleSignInClick -> signInWithGoogle(uiAction.context)
         }
     }
 
@@ -109,8 +110,8 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun signInWithGoogle() = viewModelScope.launch {
-        when (val result = authRepository.signInWithGoogle()) {
+    private fun signInWithGoogle(context: Context) = viewModelScope.launch {
+        when (val result = authRepository.signInWithGoogle(activityContext = context)) {
             is Resource.Success -> {
                 sendUiEffect(UiEffect.ShowToast(result.data))
                 sendUiEffect(UiEffect.NavigateToHome)

@@ -92,8 +92,9 @@ fun LoginContent(
 
 @Composable
 fun SocialLoginSection(onAction: (UiAction) -> Unit) {
+    val context = LocalContext.current
     OutlinedButton(
-        onClick = { onAction(UiAction.OnGoogleSignInClick) },
+        onClick = { onAction(UiAction.OnGoogleSignInClick(context)) },
         modifier = Modifier.height(48.dp)
     )
     {
