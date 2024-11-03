@@ -22,12 +22,10 @@ object RepositoryModule {
         auth: FirebaseAuth,
         firestore: FirebaseFirestore,
         credentialManager: CredentialManager,
-        @ApplicationContext context: Context
     ): AuthRepository = AuthRepository(
         auth = auth,
         firestore = firestore,
         credentialManager = credentialManager,
-        context = context
     )
 
 }

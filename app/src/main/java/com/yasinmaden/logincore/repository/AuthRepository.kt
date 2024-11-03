@@ -11,6 +11,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.yasinmaden.logincore.R
 import com.yasinmaden.logincore.common.Resource
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.tasks.await
@@ -22,7 +23,6 @@ class AuthRepository @Inject constructor(
     private val auth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
     private val credentialManager: CredentialManager,
-    @ApplicationContext private val context: Context
 ) {
     fun isUserLoggedIn(): Boolean = auth.currentUser != null
 
@@ -81,13 +81,19 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun signInWithGoogle(): Resource<String> {
+    suspend fun signInWithGoogle(activityContext: Context): Resource<String> {
 
         val hashedNonce = generateHashedNonce()
-        val request = buildGoogleSignInRequest(hashedNonce)
+        val request = buildGoogleSignInRequest(
+            nonce = hashedNonce,
+            context = activityContext
+        )
 
         return try {
-            val googleIdToken = getGoogleIdToken(request)
+            val googleIdToken = getGoogleIdToken(
+                request = request,
+                activityContext = activityContext
+            )
             val firebaseCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
             val authResult = auth.signInWithCredential(firebaseCredential).await()
 
@@ -139,10 +145,13 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    private suspend fun getGoogleIdToken(request: GetCredentialRequest): String {
+    private suspend fun getGoogleIdToken(
+        request: GetCredentialRequest,
+        activityContext: Context
+    ): String {
 
         val result = credentialManager.getCredential(
-            context = context,
+            context = activityContext,
             request = request
         )
 
@@ -159,7 +168,10 @@ class AuthRepository @Inject constructor(
         return digest.joinToString("") { "%02x".format(it) }
     }
 
-    private fun buildGoogleSignInRequest(nonce: String): GetCredentialRequest {
+    private fun buildGoogleSignInRequest(
+        nonce: String,
+        context: Context
+    ): GetCredentialRequest {
 
         val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false)

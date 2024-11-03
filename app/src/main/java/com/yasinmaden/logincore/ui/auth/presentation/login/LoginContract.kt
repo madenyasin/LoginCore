@@ -1,5 +1,7 @@
 package com.yasinmaden.logincore.ui.auth.presentation.login
 
+import android.content.Context
+
 object LoginContract {
 
     data class UiState(
@@ -17,7 +19,7 @@ object LoginContract {
         data class OnResetPasswordEmailChange(val email: String) : UiAction()
         data class OnPasswordChange(val password: String) : UiAction()
         data object OnLoginClick : UiAction()
-        data object OnGoogleSignInClick: UiAction()
+        data class OnGoogleSignInClick(val context: Context) : UiAction()
         object OnVisibilityChange : UiAction()
         object OnSignUpClick : UiAction()
         object OnForgotPasswordTextClick : UiAction()
