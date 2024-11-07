@@ -69,13 +69,12 @@ fun ProfileScreen(
         modifier = modifier
     )
 }
-
 @Composable
 fun ProfileContent(
     uiState: ProfileContract.UiState,
     uiEffect: Flow<ProfileContract.UiEffect>,
     onAction: (ProfileContract.UiAction) -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
@@ -84,161 +83,118 @@ fun ProfileContent(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
-
     ) {
-        Card {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Box {
-                    Image(
-                        imageVector = ImageVector.vectorResource(R.drawable.user_profile),
-                        contentDescription = "Profile Image",
-                        Modifier.size(70.dp)
-                    )
-
-                    Icon(
-                        imageVector = Icons.Filled.Edit,
-                        contentDescription = "Edit Profile",
-                        tint = Color.DarkGray,
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .background(
-                                color = Color.LightGray,
-                                shape = CircleShape
-                            )
-                            .padding(4.dp)
-
-                    )
-                }
-                Column {
-
-                    Text(text = "Your Name", style = MaterialTheme.typography.titleLarge)
-                    Text(text = "yourname@mail.com", style = MaterialTheme.typography.bodyMedium)
-                }
-            }
-        }
+        ProfileCard()
         HorizontalDivider()
-        ElevatedCard {
-            Row(
-                Modifier.fillMaxWidth().padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text("Name", style = MaterialTheme.typography.titleMedium)
-                Text("Yourname", style = MaterialTheme.typography.titleMedium)
-            }
-            Row(
-                Modifier.fillMaxWidth().padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text("Email", style = MaterialTheme.typography.titleMedium)
-                Text("yourname@mail.com", style = MaterialTheme.typography.titleMedium)
-            }
-            Row(
-                Modifier.fillMaxWidth().padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text("Phone Number", style = MaterialTheme.typography.titleMedium)
-                Text("Add Number", style = MaterialTheme.typography.titleMedium)
-            }
-        }
+        ProfileInfoCard()
         HorizontalDivider()
-        OutlinedCard(
-            Modifier.clickable {
-                // TODO: Navigate to settings screen
-            }
-        ) {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Settings,
-                    contentDescription = "Settings",
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text("Settings", style = MaterialTheme.typography.titleMedium)
-                Box(Modifier.weight(1f)) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                        contentDescription = "Go Settings",
-                        Modifier.align(Alignment.CenterEnd)
-                    )
-                }
-            }
-        }
-
-        OutlinedCard(
-            Modifier.clickable {
-                // TODO: Navigate to notifications screen
-            }
-        ) {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Notifications,
-                    contentDescription = "Notifications",
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text("Notifications", style = MaterialTheme.typography.titleMedium)
-                Box(Modifier.weight(1f)) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                        contentDescription = "Go Notifications",
-                        Modifier.align(Alignment.CenterEnd)
-                    )
-
-                }
-            }
-        }
-        OutlinedCard(
-            Modifier.clickable {
-                onAction.invoke(ProfileContract.UiAction.Logout)
-            }
-        ) {
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_logout),
-                    contentDescription = "Log Out",
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text("Log Out", style = MaterialTheme.typography.titleMedium)
-                Box(Modifier.weight(1f)) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                        contentDescription = "Go Log Out",
-                        Modifier.align(Alignment.CenterEnd)
-                    )
-                }
-            }
-        }
-
-
+        ProfileOptions(
+            icon = Icons.Outlined.Settings,
+            text = "Settings",
+            onClick = { /* TODO: Navigate to settings screen */ }
+        )
+        ProfileOptions(
+            icon = Icons.Outlined.Notifications,
+            text = "Notifications",
+            onClick = { /* TODO: Navigate to notifications screen */ }
+        )
+        ProfileOptions(
+            icon = ImageVector.vectorResource(R.drawable.ic_logout),
+            text = "Log Out",
+            onClick = { onAction.invoke(ProfileContract.UiAction.Logout) }
+        )
     }
-
-
 }
+
+@Composable
+fun ProfileCard() {
+    Card {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Box {
+                Image(
+                    imageVector = ImageVector.vectorResource(R.drawable.user_profile),
+                    contentDescription = "Profile Image",
+                    Modifier.size(70.dp)
+                )
+                Icon(
+                    imageVector = Icons.Filled.Edit,
+                    contentDescription = "Edit Profile",
+                    tint = Color.DarkGray,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .background(
+                            color = Color.LightGray,
+                            shape = CircleShape
+                        )
+                        .padding(4.dp)
+                )
+            }
+            Column {
+                Text(text = "Your Name", style = MaterialTheme.typography.titleLarge)
+                Text(text = "yourname@mail.com", style = MaterialTheme.typography.bodyMedium)
+            }
+        }
+    }
+}
+
+@Composable
+fun ProfileInfoCard() {
+    ElevatedCard {
+        listOf(
+            "Name" to "Yourname",
+            "Email" to "yourname@mail.com",
+            "Phone Number" to "Add Number"
+        ).forEach { (label, value) ->
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(label, style = MaterialTheme.typography.titleMedium)
+                Text(value, style = MaterialTheme.typography.titleMedium)
+            }
+        }
+    }
+}
+
+@Composable
+fun ProfileOptions(
+    icon: ImageVector,
+    text: String,
+    onClick: () -> Unit
+) {
+    OutlinedCard(
+        Modifier.clickable { onClick() }
+    ) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Icon(icon, contentDescription = text)
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(text, style = MaterialTheme.typography.titleMedium)
+            Box(Modifier.weight(1f)) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = "Navigate to $text",
+                    Modifier.align(Alignment.CenterEnd)
+                )
+            }
+        }
+    }
+}
+
 
 @Composable
 fun HandleProfileUiEffects(
