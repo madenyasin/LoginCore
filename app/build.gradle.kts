@@ -44,6 +44,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.coil.compose)
+    implementation(libs.coil3.coil.network.okhttp)
+
     implementation(libs.androidx.credentials)
     implementation(libs.googleid)
     implementation(libs.androidx.credentials.play.services.auth)
