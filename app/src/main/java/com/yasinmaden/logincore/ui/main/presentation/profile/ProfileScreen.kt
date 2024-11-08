@@ -1,5 +1,6 @@
 package com.yasinmaden.logincore.ui.main.presentation.profile
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,26 +12,22 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
@@ -38,13 +35,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil3.compose.AsyncImage
 import com.yasinmaden.logincore.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -64,18 +65,20 @@ fun ProfileScreen(
 
     ProfileContent(
         uiState = uiState,
-        uiEffect = uiEffect,
         onAction = onAction,
         modifier = modifier
     )
 }
+
 @Composable
 fun ProfileContent(
     uiState: ProfileContract.UiState,
-    uiEffect: Flow<ProfileContract.UiEffect>,
     onAction: (ProfileContract.UiAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    LaunchedEffect(true) {
+        onAction(ProfileContract.UiAction.LoadProfile)
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -84,9 +87,11 @@ fun ProfileContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
     ) {
-        ProfileCard()
-        HorizontalDivider()
-        ProfileInfoCard()
+        ProfileCard(
+            uiState = uiState,
+            onAction = onAction
+        )
+
         HorizontalDivider()
         ProfileOptions(
             icon = Icons.Outlined.Settings,
@@ -107,7 +112,10 @@ fun ProfileContent(
 }
 
 @Composable
-fun ProfileCard() {
+fun ProfileCard(
+    uiState: ProfileContract.UiState,
+    onAction: (ProfileContract.UiAction) -> Unit,
+) {
     Card {
         Row(
             Modifier
@@ -116,50 +124,58 @@ fun ProfileCard() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Box {
-                Image(
-                    imageVector = ImageVector.vectorResource(R.drawable.user_profile),
-                    contentDescription = "Profile Image",
-                    Modifier.size(70.dp)
-                )
-                Icon(
-                    imageVector = Icons.Filled.Edit,
-                    contentDescription = "Edit Profile",
-                    tint = Color.DarkGray,
+            Box(
+                modifier = Modifier
+                    .size(72.dp)
+
+            ) {
+                Box(
                     modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .background(
-                            color = Color.LightGray,
-                            shape = CircleShape
+                        .size(64.dp) // Profil resminin boyutu
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.inversePrimary)
+                ) {
+                    if (uiState.imageUrl != "null") {
+                        AsyncImage(
+                            model = uiState.imageUrl,
+                            contentDescription = "Profile Picture",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape)
                         )
+                    } else {
+                        Image(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.user_profile),
+                            contentDescription = "Profile Picture",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(CircleShape),
+                        )
+                    }
+                }
+
+                IconButton(
+                    onClick = { },
+                    modifier = Modifier
+                        .size(24.dp)
+                        .align(Alignment.BottomEnd)
+                        .offset(x = (-8).dp, y = (-8).dp)
+                        .background(MaterialTheme.colorScheme.surface, CircleShape)
                         .padding(4.dp)
-                )
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Edit,
+                        contentDescription = "Edit Profile",
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
             }
             Column {
-                Text(text = "Your Name", style = MaterialTheme.typography.titleLarge)
-                Text(text = "yourname@mail.com", style = MaterialTheme.typography.bodyMedium)
-            }
-        }
-    }
-}
-
-@Composable
-fun ProfileInfoCard() {
-    ElevatedCard {
-        listOf(
-            "Name" to "Yourname",
-            "Email" to "yourname@mail.com",
-            "Phone Number" to "Add Number"
-        ).forEach { (label, value) ->
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(label, style = MaterialTheme.typography.titleMedium)
-                Text(value, style = MaterialTheme.typography.titleMedium)
+                Text(text = uiState.name, style = MaterialTheme.typography.titleLarge)
+                Text(text = uiState.email, style = MaterialTheme.typography.bodyMedium)
+                Text(uiState.phoneNumber, style = MaterialTheme.typography.bodyMedium)
             }
         }
     }
@@ -225,7 +241,12 @@ fun HandleProfileUiEffects(
 @Composable
 fun ProfileScreenPreview() {
     ProfileScreen(
-        uiState = ProfileContract.UiState(),
+        uiState = ProfileContract.UiState(
+            name = "John Doe",
+            email = "john.mclean@examplepetstore.com",
+            phoneNumber = "123-456-7890",
+            imageUrl = "null"
+        ),
         uiEffect = flowOf(),
         onAction = {},
         navController = NavController(LocalContext.current)

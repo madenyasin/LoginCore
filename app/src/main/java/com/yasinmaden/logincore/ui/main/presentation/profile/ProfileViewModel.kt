@@ -2,6 +2,7 @@ package com.yasinmaden.logincore.ui.main.presentation.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.yasinmaden.logincore.common.Resource
 import com.yasinmaden.logincore.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val auth: FirebaseAuth
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProfileContract.UiState())
     val uiState = _uiState.asStateFlow()
@@ -26,6 +28,21 @@ class ProfileViewModel @Inject constructor(
     fun onAction(uiAction: ProfileContract.UiAction) {
         when (uiAction) {
             ProfileContract.UiAction.Logout -> logout()
+            ProfileContract.UiAction.LoadProfile -> loadUiState()
+            ProfileContract.UiAction.EditProfilePicture -> {
+                //TODO: Edit profile picture
+            }
+        }
+    }
+
+    private fun loadUiState() {
+        updateUiState {
+            copy(
+                name = auth.currentUser?.displayName.toString(),
+                email = auth.currentUser?.email.toString(),
+                imageUrl = auth.currentUser?.photoUrl.toString(),
+                phoneNumber = auth.currentUser?.phoneNumber.toString()
+            )
         }
     }
 
