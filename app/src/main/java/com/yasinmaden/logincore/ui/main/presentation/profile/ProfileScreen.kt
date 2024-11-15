@@ -131,7 +131,7 @@ fun ProfileCard(
             ) {
                 Box(
                     modifier = Modifier
-                        .size(64.dp) // Profil resminin boyutu
+                        .size(64.dp)
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.inversePrimary)
                 ) {

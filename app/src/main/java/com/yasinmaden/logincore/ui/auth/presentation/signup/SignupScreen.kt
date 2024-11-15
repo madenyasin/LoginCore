@@ -69,7 +69,7 @@ fun HandleSignupUiEffect(
                 }
 
                 SignupContract.UiEffect.NavigateToHome -> {
-                    navController.navigate(Screen.Home.route){
+                    navController.navigate(Screen.Profile.route){
                         popUpTo(Screen.Login.route){
                             inclusive = true
                         }
