@@ -1,31 +1,26 @@
 package com.yasinmaden.logincore.di
 
-import android.content.Context
-import androidx.credentials.CredentialManager
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.yasinmaden.logincore.repository.AuthRepository
+import com.yasinmaden.logincore.data.repository.AuthRepositoryImpl
+import com.yasinmaden.logincore.data.repository.UserRepositoryImpl
+import com.yasinmaden.logincore.domain.repository.AuthRepository
+import com.yasinmaden.logincore.domain.repository.UserRepository
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RepositoryModule {
+abstract class RepositoryModule {
 
-    @Provides
-    @Singleton
-    fun provideAuthRepository(
-        auth: FirebaseAuth,
-        firestore: FirebaseFirestore,
-        credentialManager: CredentialManager,
-    ): AuthRepository = AuthRepository(
-        auth = auth,
-        firestore = firestore,
-        credentialManager = credentialManager,
-    )
 
+    @Binds
+    abstract fun bindAuthRepository(
+        authRepositoryImpl: AuthRepositoryImpl
+    ): AuthRepository
+
+    @Binds
+    abstract fun bindUserRepository(
+        userRepositoryImpl: UserRepositoryImpl
+    ): UserRepository
 }
