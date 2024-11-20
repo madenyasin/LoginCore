@@ -15,12 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import com.yasinmaden.logincore.presentation.auth.login.LoginContract
-import com.yasinmaden.logincore.presentation.auth.login.LoginContract.UiAction
+import com.yasinmaden.logincore.presentation.auth.signin.SignInContract
+import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiAction
 
 @Composable
 fun ResetPasswordDialog(
-    uiState: LoginContract.UiState,
+    uiState: SignInContract.UiState,
     onAction: (UiAction) -> Unit,
     modifier: Modifier = Modifier,
 ){
@@ -28,8 +28,8 @@ fun ResetPasswordDialog(
         title = { Text(text = "Reset Password") },
         text = {
             OutlinedTextField(
-                value = uiState.resetPasswordEmail,
-                onValueChange = { onAction(UiAction.OnResetPasswordEmailChange(it)) },
+                value = uiState.resetEmail,
+                onValueChange = { onAction(UiAction.OnResetEmailChange(it)) },
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text(text = "Email") },
                 placeholder = { Text(text = "Enter your email") },
@@ -55,18 +55,18 @@ fun ResetPasswordDialog(
         },
         confirmButton = {
             Button(
-                onClick = { onAction(UiAction.OnResetPasswordDialogConfirm) }
+                onClick = { onAction(UiAction.OnResetDialogConfirm) }
             ) {
                 Text(text = "Send")
             }
         },
         dismissButton = {
             OutlinedButton(
-                onClick = { onAction(UiAction.OnResetPasswordDialogDismiss) }
+                onClick = { onAction(UiAction.OnResetDialogDismiss) }
             ) {
                 Text(text = "Cancel")
             }
         },
-        onDismissRequest = { onAction(UiAction.OnResetPasswordDialogDismissRequest) },
+        onDismissRequest = { onAction(UiAction.OnResetDialogDismissRequest) },
     )
 }

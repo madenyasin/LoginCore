@@ -17,17 +17,17 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.yasinmaden.logincore.R
-import com.yasinmaden.logincore.presentation.auth.login.LoginContract
-import com.yasinmaden.logincore.presentation.auth.login.LoginContract.UiAction.OnPasswordChange
-import com.yasinmaden.logincore.presentation.auth.login.LoginContract.UiAction.OnVisibilityChange
+import com.yasinmaden.logincore.presentation.auth.signin.SignInContract
+import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiAction.OnPasswordChange
+import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiAction.OnPasswordVisibilityToggle
 
 @Composable
-fun LoginPasswordField(
-    uiState: LoginContract.UiState,
-    onAction: (LoginContract.UiAction) -> Unit,
+fun SignInPasswordField(
+    uiState: SignInContract.UiState,
+    onAction: (SignInContract.UiAction) -> Unit,
     modifier: Modifier = Modifier,
 ){
-    val visibilityIcon = if (uiState.passwordVisibility) {
+    val visibilityIcon = if (uiState.isPasswordVisible) {
         ImageVector.vectorResource(R.drawable.ic_visibility_on)
     } else {
         ImageVector.vectorResource(R.drawable.ic_visibility_off)
@@ -44,7 +44,7 @@ fun LoginPasswordField(
         supportingText = { Text("Enter your password") },
         singleLine = true,
         isError = uiState.isPasswordError,
-        visualTransformation = if (uiState.passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+        visualTransformation = if (uiState.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         leadingIcon = {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_password),
@@ -53,7 +53,7 @@ fun LoginPasswordField(
         },
         trailingIcon = {
             IconButton(
-                onClick = { onAction(OnVisibilityChange) }
+                onClick = { onAction(OnPasswordVisibilityToggle) }
             ) {
                 Icon(
                     imageVector = visibilityIcon,

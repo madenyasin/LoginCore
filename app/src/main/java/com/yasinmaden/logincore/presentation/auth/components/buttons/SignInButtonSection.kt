@@ -12,12 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yasinmaden.logincore.presentation.auth.login.LoginContract
-import com.yasinmaden.logincore.presentation.auth.login.LoginContract.UiAction
+import com.yasinmaden.logincore.presentation.auth.signin.SignInContract
+import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiAction
 
 @Composable
-fun LoginButtonSection(
-    uiState: LoginContract.UiState,
+fun SignInButtonSection(
+    uiState: SignInContract.UiState,
     onAction: (UiAction) -> Unit,
     modifier: Modifier = Modifier,
 ){
@@ -37,7 +37,7 @@ fun LoginButtonSection(
         }
         Button(
             onClick = {
-                onAction(UiAction.OnLoginClick)
+                onAction(UiAction.OnSignInClick)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -47,7 +47,7 @@ fun LoginButtonSection(
                 pressedElevation = 4.dp
             ),
         ) {
-            Text(text = "Login")
+            Text(text = "Sign In")
         }
     }
 }

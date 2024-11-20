@@ -22,7 +22,7 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
     override fun isUserLoggedIn(): Boolean = auth.currentUser != null
 
-    override suspend fun signIn(email: String, password: String): Resource<User> {
+    override suspend fun signInWithEmailAndPassword(email: String, password: String): Resource<User> {
         return try {
             auth.signInWithEmailAndPassword(email, password).await()
 
@@ -37,7 +37,7 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun signUp(
+    override suspend fun signUpWithEmailAndPassword(
         email: String,
         password: String,
         confirmPassword: String,
@@ -65,7 +65,7 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun logout(): Resource<String> {
+    override suspend fun signOut(): Resource<String> {
         return try {
             auth.signOut()
 

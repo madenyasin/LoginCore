@@ -13,17 +13,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.yasinmaden.logincore.presentation.auth.signup.SignupContract
+import com.yasinmaden.logincore.presentation.auth.signup.SignUpContract
 
 @Composable
 fun SignupNameField(
-    uiState: SignupContract.UiState,
-    onAction: (SignupContract.UiAction) -> Unit,
+    uiState: SignUpContract.UiState,
+    onAction: (SignUpContract.UiAction) -> Unit,
     modifier: Modifier = Modifier
 ){
     OutlinedTextField(
         value = uiState.name,
-        onValueChange = { onAction(SignupContract.UiAction.OnNameChange(it)) },
+        onValueChange = { onAction(SignUpContract.UiAction.OnNameChange(it)) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),

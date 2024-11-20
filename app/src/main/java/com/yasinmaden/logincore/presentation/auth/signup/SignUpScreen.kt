@@ -31,9 +31,9 @@ import kotlinx.coroutines.flow.flow
 
 @Composable
 fun SignupScreen(
-    uiState: SignupContract.UiState,
-    uiEffect: Flow<SignupContract.UiEffect>,
-    onAction: (SignupContract.UiAction) -> Unit,
+    uiState: SignUpContract.UiState,
+    uiEffect: Flow<SignUpContract.UiEffect>,
+    onAction: (SignUpContract.UiAction) -> Unit,
     navController: NavController,
     modifier: Modifier = Modifier,
 ) {
@@ -52,30 +52,30 @@ fun SignupScreen(
 
 @Composable
 fun HandleSignupUiEffect(
-    uiEffect: Flow<SignupContract.UiEffect>,
+    uiEffect: Flow<SignUpContract.UiEffect>,
     navController: NavController,
 ) {
     val context = LocalContext.current
     LaunchedEffect(Unit) {
         uiEffect.collect { effect ->
             when (effect) {
-                SignupContract.UiEffect.OnNavigateToLoginScreen -> {
-                    navController.navigate(Screen.Login.route) {
+                SignUpContract.UiEffect.NavigateToSignInScreen -> {
+                    navController.navigate(Screen.SignIn.route) {
                         launchSingleTop = true
-                        popUpTo(Screen.Signup.route) {
+                        popUpTo(Screen.SignUp.route) {
                             inclusive = true
                         }
                     }
                 }
 
-                SignupContract.UiEffect.NavigateToHome -> {
+                SignUpContract.UiEffect.NavigateToHomeScreen -> {
                     navController.navigate(Screen.Profile.route){
-                        popUpTo(Screen.Login.route){
+                        popUpTo(Screen.SignIn.route){
                             inclusive = true
                         }
                     }
                 }
-                is SignupContract.UiEffect.ShowToast -> {
+                is SignUpContract.UiEffect.ShowToast -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
 
                 }
@@ -87,18 +87,18 @@ fun HandleSignupUiEffect(
 
 @Composable
 fun SignupContent(
-    uiState: SignupContract.UiState,
-    onAction: (SignupContract.UiAction) -> Unit,
+    uiState: SignUpContract.UiState,
+    onAction: (SignUpContract.UiAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
 
-    val passwordVisibilityIcon = if (uiState.passwordVisibility) {
+    val passwordVisibilityIcon = if (uiState.isPasswordVisible) {
         ImageVector.vectorResource(R.drawable.ic_visibility_on)
     } else {
         ImageVector.vectorResource(R.drawable.ic_visibility_off)
     }
 
-    val confirmPasswordVisibilityIcon = if (uiState.confirmPasswordVisibility) {
+    val confirmPasswordVisibilityIcon = if (uiState.isConfirmPasswordVisible) {
         ImageVector.vectorResource(R.drawable.ic_visibility_on)
     } else {
         ImageVector.vectorResource(R.drawable.ic_visibility_off)
@@ -139,7 +139,7 @@ fun SignupContent(
 @Preview(showBackground = true)
 fun SignupScreenPreview() {
     SignupScreen(
-        uiState = SignupContract.UiState(),
+        uiState = SignUpContract.UiState(),
         uiEffect = flow { },
         onAction = {},
         navController = NavController(LocalContext.current)

@@ -8,12 +8,12 @@ import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withLink
-import com.yasinmaden.logincore.presentation.auth.signup.SignupContract
+import com.yasinmaden.logincore.presentation.auth.signup.SignUpContract
 import com.yasinmaden.logincore.common.Constants
 
 @Composable
 fun SignupHaveAnAccountText(
-    onAction: (SignupContract.UiAction) -> Unit
+    onAction: (SignUpContract.UiAction) -> Unit
 ){
     Text(
         text = buildAnnotatedString {
@@ -26,7 +26,7 @@ fun SignupHaveAnAccountText(
                             fontWeight = FontWeight.Bold
                         )
                     ),
-                    linkInteractionListener = { onAction(SignupContract.UiAction.OnSignInTextClick) }
+                    linkInteractionListener = { onAction(SignUpContract.UiAction.OnSignInClick) }
                 )
             ) {
                 append("Sign In")

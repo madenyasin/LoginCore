@@ -6,18 +6,18 @@ object ProfileContract {
         val name: String = "",
         val email: String = "",
         val phoneNumber: String = "",
-        val imageUrl: String = ""
+        val profileImageUrl: String = ""
     )
 
     sealed class UiAction {
-        data object Logout : UiAction()
+        data object SignOut : UiAction()
         data object LoadProfile : UiAction()
-        data object EditProfilePicture : UiAction()
+        data object OnEditProfilePictureClick : UiAction()
 
     }
 
     sealed class UiEffect {
         data class ShowToast(val message: String) : UiEffect()
-        data object NavigateToLogin : UiEffect()
+        data object NavigateToSignInScreen : UiEffect()
     }
 }

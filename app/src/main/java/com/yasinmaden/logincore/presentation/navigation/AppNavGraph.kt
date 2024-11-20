@@ -7,10 +7,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.yasinmaden.logincore.presentation.auth.login.LoginScreen
-import com.yasinmaden.logincore.presentation.auth.login.LoginViewModel
+import com.yasinmaden.logincore.presentation.auth.signin.SignInScreen
+import com.yasinmaden.logincore.presentation.auth.signin.SignInViewModel
 import com.yasinmaden.logincore.presentation.auth.signup.SignupScreen
-import com.yasinmaden.logincore.presentation.auth.signup.SignupViewModel
+import com.yasinmaden.logincore.presentation.auth.signup.SignUpViewModel
 import com.yasinmaden.logincore.presentation.main.home.HomeScreen
 import com.yasinmaden.logincore.presentation.main.home.HomeViewModel
 import com.yasinmaden.logincore.presentation.main.profile.ProfileScreen
@@ -22,25 +22,25 @@ import com.yasinmaden.logincore.presentation.main.settings.SettingsViewModel
 fun AppNavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Login.route
+        startDestination = Screen.SignIn.route
     ) {
-        composable(route = Screen.Login.route) {
+        composable(route = Screen.SignIn.route) {
 
-            val viewModel: LoginViewModel = hiltViewModel()
+            val viewModel: SignInViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val onAction = viewModel::onAction
             val uiEffect = viewModel.uiEffect
 
-            LoginScreen(
+            SignInScreen(
                 uiState = uiState,
                 onAction = onAction,
                 uiEffect = uiEffect,
                 navController = navController
             )
         }
-        composable(route = Screen.Signup.route) {
+        composable(route = Screen.SignUp.route) {
 
-            val viewModel: SignupViewModel = hiltViewModel()
+            val viewModel: SignUpViewModel = hiltViewModel()
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             val onAction = viewModel::onAction
             val uiEffect = viewModel.uiEffect

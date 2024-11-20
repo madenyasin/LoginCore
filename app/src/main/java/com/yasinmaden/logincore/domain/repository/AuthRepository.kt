@@ -7,16 +7,16 @@ import com.yasinmaden.logincore.domain.model.User
 interface AuthRepository {
     fun isUserLoggedIn(): Boolean
 
-    suspend fun signIn(email: String, password: String): Resource<User>
+    suspend fun signInWithEmailAndPassword(email: String, password: String): Resource<User>
 
-    suspend fun signUp(
+    suspend fun signUpWithEmailAndPassword(
         email: String,
         password: String,
         confirmPassword: String,
         name: String
     ): Resource<User>
 
-    suspend fun logout(): Resource<String>
+    suspend fun signOut(): Resource<String>
 
     suspend fun sendResetPasswordEmail(email: String): Resource<String>
 

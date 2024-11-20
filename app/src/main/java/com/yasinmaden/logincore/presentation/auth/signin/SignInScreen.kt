@@ -1,4 +1,4 @@
-package com.yasinmaden.logincore.presentation.auth.login
+package com.yasinmaden.logincore.presentation.auth.signin
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -27,21 +27,21 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.yasinmaden.logincore.R
 import com.yasinmaden.logincore.presentation.navigation.Screen
-import com.yasinmaden.logincore.presentation.auth.components.buttons.LoginButtonSection
+import com.yasinmaden.logincore.presentation.auth.components.buttons.SignInButtonSection
 import com.yasinmaden.logincore.presentation.auth.components.others.AppLogo
 import com.yasinmaden.logincore.presentation.auth.components.others.ResetPasswordDialog
-import com.yasinmaden.logincore.presentation.auth.components.textfields.LoginEmailField
-import com.yasinmaden.logincore.presentation.auth.components.textfields.LoginPasswordField
-import com.yasinmaden.logincore.presentation.auth.components.texts.LoginForgotPasswordText
-import com.yasinmaden.logincore.presentation.auth.login.LoginContract.UiAction
-import com.yasinmaden.logincore.presentation.auth.login.LoginContract.UiEffect
-import com.yasinmaden.logincore.presentation.auth.login.LoginContract.UiState
+import com.yasinmaden.logincore.presentation.auth.components.textfields.SignInEmailField
+import com.yasinmaden.logincore.presentation.auth.components.textfields.SignInPasswordField
+import com.yasinmaden.logincore.presentation.auth.components.texts.SignInForgotPasswordText
+import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiAction
+import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiEffect
+import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiState
 import com.yasinmaden.logincore.theme.LoginCoreTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 @Composable
-fun LoginScreen(
+fun SignInScreen(
     uiState: UiState,
     uiEffect: Flow<UiEffect>,
     onAction: (UiAction) -> Unit,
@@ -49,12 +49,12 @@ fun LoginScreen(
     modifier: Modifier = Modifier
 ) {
 
-    HandleLoginUiEffects(
+    HandleSignInUiEffects(
         uiEffect = uiEffect,
         navController = navController
     )
 
-    LoginContent(
+    SignInContent(
         uiState = uiState,
         onAction = onAction,
         modifier = modifier
@@ -62,7 +62,7 @@ fun LoginScreen(
 }
 
 @Composable
-fun LoginContent(
+fun SignInContent(
     uiState: UiState,
     onAction: (UiAction) -> Unit,
     modifier: Modifier = Modifier
@@ -76,22 +76,22 @@ fun LoginContent(
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
     ) {
 
-        if (uiState.resetPasswordDialogVisibility) {
+        if (uiState.isResetDialogVisible) {
             ResetPasswordDialog(uiState = uiState, onAction = onAction)
         }
 
         AppLogo()
-        LoginEmailField(uiState = uiState, onAction = onAction)
-        LoginPasswordField(uiState = uiState, onAction = onAction)
-        LoginButtonSection(uiState = uiState, onAction = onAction)
-        LoginForgotPasswordText(onAction)
+        SignInEmailField(uiState = uiState, onAction = onAction)
+        SignInPasswordField(uiState = uiState, onAction = onAction)
+        SignInButtonSection(uiState = uiState, onAction = onAction)
+        SignInForgotPasswordText(onAction)
         HorizontalDivider()
-        SocialLoginSection(onAction)
+        SocialSignInSection(onAction)
     }
 }
 
 @Composable
-fun SocialLoginSection(onAction: (UiAction) -> Unit) {
+fun SocialSignInSection(onAction: (UiAction) -> Unit) {
     val context = LocalContext.current
     OutlinedButton(
         onClick = { onAction(UiAction.OnGoogleSignInClick(context)) },
@@ -110,7 +110,7 @@ fun SocialLoginSection(onAction: (UiAction) -> Unit) {
 }
 
 @Composable
-fun HandleLoginUiEffects(
+fun HandleSignInUiEffects(
     uiEffect: Flow<UiEffect>,
     navController: NavController
 ) {
@@ -118,13 +118,13 @@ fun HandleLoginUiEffects(
     LaunchedEffect(Unit) {
         uiEffect.collect { effect ->
             when (effect) {
-                UiEffect.NavigateToSignUp -> {
-                    navController.navigate(Screen.Signup.route)
+                UiEffect.NavigateToSignUpScreen -> {
+                    navController.navigate(Screen.SignUp.route)
                 }
 
-                UiEffect.NavigateToHome -> {
+                UiEffect.NavigateToHomeScreen -> {
                     navController.navigate(Screen.Profile.route) {
-                        popUpTo(Screen.Login.route) {
+                        popUpTo(Screen.SignIn.route) {
                             inclusive = true
                         }
                     }
@@ -140,9 +140,9 @@ fun HandleLoginUiEffects(
 
 @Composable
 @Preview(showBackground = true)
-fun LoginScreenPreview() {
+fun SignInScreenPreview() {
     LoginCoreTheme {
-        LoginScreen(
+        SignInScreen(
             uiState = UiState(),
             onAction = {},
             uiEffect = flow { },

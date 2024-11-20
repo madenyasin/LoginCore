@@ -27,9 +27,9 @@ class ProfileViewModel @Inject constructor(
 
     fun onAction(uiAction: ProfileContract.UiAction) {
         when (uiAction) {
-            ProfileContract.UiAction.Logout -> logout()
+            ProfileContract.UiAction.SignOut -> signOut()
             ProfileContract.UiAction.LoadProfile -> loadUiState()
-            ProfileContract.UiAction.EditProfilePicture -> {
+            ProfileContract.UiAction.OnEditProfilePictureClick -> {
                 //TODO: Edit profile picture
             }
         }
@@ -40,16 +40,16 @@ class ProfileViewModel @Inject constructor(
             copy(
                 name = auth.currentUser?.displayName.toString(),
                 email = auth.currentUser?.email.toString(),
-                imageUrl = auth.currentUser?.photoUrl.toString(),
+                profileImageUrl = auth.currentUser?.photoUrl.toString(),
                 phoneNumber = auth.currentUser?.phoneNumber.toString()
             )
         }
     }
 
-    private fun logout() = viewModelScope.launch {
-        when (val result = authRepository.logout()) {
+    private fun signOut() = viewModelScope.launch {
+        when (val result = authRepository.signOut()) {
             is Resource.Success -> {
-                sendUiEffect(ProfileContract.UiEffect.NavigateToLogin)
+                sendUiEffect(ProfileContract.UiEffect.NavigateToSignInScreen)
                 sendUiEffect(ProfileContract.UiEffect.ShowToast(result.data))
             }
 

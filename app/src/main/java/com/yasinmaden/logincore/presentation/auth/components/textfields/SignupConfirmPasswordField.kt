@@ -17,17 +17,17 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.yasinmaden.logincore.R
-import com.yasinmaden.logincore.presentation.auth.signup.SignupContract
+import com.yasinmaden.logincore.presentation.auth.signup.SignUpContract
 
 @Composable
 fun SignupConfirmPasswordField(
-    uiState: SignupContract.UiState,
-    onAction: (SignupContract.UiAction) -> Unit,
+    uiState: SignUpContract.UiState,
+    onAction: (SignUpContract.UiAction) -> Unit,
     trailingIcon: ImageVector
 ){
     OutlinedTextField(
         value = uiState.confirmPassword,
-        onValueChange = { onAction(SignupContract.UiAction.OnConfirmPasswordChange(it)) },
+        onValueChange = { onAction(SignUpContract.UiAction.OnConfirmPasswordChange(it)) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
@@ -36,7 +36,7 @@ fun SignupConfirmPasswordField(
         supportingText = { Text("Confirm your password") },
         singleLine = true,
         isError = uiState.isConfirmPasswordError,
-        visualTransformation = if (uiState.confirmPasswordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+        visualTransformation = if (uiState.isConfirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         leadingIcon = {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_password),
@@ -45,7 +45,7 @@ fun SignupConfirmPasswordField(
         },
         trailingIcon = {
             IconButton(
-                onClick = { onAction(SignupContract.UiAction.OnConfirmPasswordVisibilityChange) }
+                onClick = { onAction(SignUpContract.UiAction.OnConfirmPasswordVisibilityToggle) }
             ) {
                 Icon(
                     imageVector = trailingIcon,

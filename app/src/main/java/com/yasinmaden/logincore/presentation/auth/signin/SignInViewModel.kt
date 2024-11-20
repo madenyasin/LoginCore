@@ -1,13 +1,13 @@
-package com.yasinmaden.logincore.presentation.auth.login
+package com.yasinmaden.logincore.presentation.auth.signin
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinmaden.logincore.common.Resource
 import com.yasinmaden.logincore.domain.repository.AuthRepository
-import com.yasinmaden.logincore.presentation.auth.login.LoginContract.UiAction
-import com.yasinmaden.logincore.presentation.auth.login.LoginContract.UiState
-import com.yasinmaden.logincore.presentation.auth.login.LoginContract.UiEffect
+import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiAction
+import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiState
+import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
+class SignInViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
@@ -35,32 +35,32 @@ class LoginViewModel @Inject constructor(
 
             is UiAction.OnPasswordChange -> updateUiState { copy(password = uiAction.password) }
 
-            UiAction.OnVisibilityChange -> updateUiState { copy(passwordVisibility = !_uiState.value.passwordVisibility) }
+            UiAction.OnPasswordVisibilityToggle -> updateUiState { copy(isPasswordVisible = !_uiState.value.isPasswordVisible) }
 
-            UiAction.OnSignUpClick -> viewModelScope.launch { sendUiEffect(UiEffect.NavigateToSignUp) }
+            UiAction.OnSignUpClick -> viewModelScope.launch { sendUiEffect(UiEffect.NavigateToSignUpScreen) }
 
-            UiAction.OnForgotPasswordTextClick -> updateUiState {
+            UiAction.OnForgotPasswordClick -> updateUiState {
                 copy(
-                    resetPasswordDialogVisibility = !_uiState.value.resetPasswordDialogVisibility
+                    isResetDialogVisible = !_uiState.value.isResetDialogVisible
                 )
             }
 
-            UiAction.OnResetPasswordDialogDismiss -> updateUiState {
+            UiAction.OnResetDialogDismiss -> updateUiState {
                 copy(
-                    resetPasswordDialogVisibility = false
+                    isResetDialogVisible = false
                 )
             }
 
-            UiAction.OnResetPasswordDialogDismissRequest -> updateUiState {
+            UiAction.OnResetDialogDismissRequest -> updateUiState {
                 copy(
-                    resetPasswordDialogVisibility = false
+                    isResetDialogVisible = false
                 )
             }
 
-            is UiAction.OnResetPasswordEmailChange -> updateUiState { copy(resetPasswordEmail = uiAction.email) }
-            UiAction.OnResetPasswordDialogConfirm -> sendResetPasswordEmail()
+            is UiAction.OnResetEmailChange -> updateUiState { copy(resetEmail = uiAction.email) }
+            UiAction.OnResetDialogConfirm -> sendResetPasswordEmail()
 
-            is UiAction.OnLoginClick -> signIn()
+            is UiAction.OnSignInClick -> signInWithEmailAndPassword()
             is UiAction.OnGoogleSignInClick -> signInWithGoogle(uiAction.context)
         }
     }
@@ -71,10 +71,10 @@ class LoginViewModel @Inject constructor(
 
     private fun isUserLoggedIn() = viewModelScope.launch {
         if (authRepository.isUserLoggedIn())
-            sendUiEffect(UiEffect.NavigateToHome)
+            sendUiEffect(UiEffect.NavigateToHomeScreen)
     }
 
-    private fun signIn() = viewModelScope.launch {
+    private fun signInWithEmailAndPassword() = viewModelScope.launch {
         updateUiState {
             copy(
                 isEmailError = uiState.value.email.isEmpty(),
@@ -84,9 +84,9 @@ class LoginViewModel @Inject constructor(
         if (uiState.value.isEmailError || uiState.value.isPasswordError)
             return@launch
 
-        when (val result = authRepository.signIn(uiState.value.email, uiState.value.password)) {
+        when (val result = authRepository.signInWithEmailAndPassword(uiState.value.email, uiState.value.password)) {
             is Resource.Success -> {
-                sendUiEffect(UiEffect.NavigateToHome)
+                sendUiEffect(UiEffect.NavigateToHomeScreen)
                 sendUiEffect(UiEffect.ShowToast(result.data.uid))
             }
 
@@ -98,9 +98,9 @@ class LoginViewModel @Inject constructor(
 
     private fun sendResetPasswordEmail() = viewModelScope.launch {
         when (val result =
-            authRepository.sendResetPasswordEmail(uiState.value.resetPasswordEmail)) {
+            authRepository.sendResetPasswordEmail(uiState.value.resetEmail)) {
             is Resource.Success -> {
-                updateUiState { copy(resetPasswordDialogVisibility = false) }
+                updateUiState { copy(isResetDialogVisible = false) }
                 sendUiEffect(UiEffect.ShowToast(result.data))
             }
 
@@ -114,7 +114,7 @@ class LoginViewModel @Inject constructor(
         when (val result = authRepository.signInWithGoogle(activityContext = context)) {
             is Resource.Success -> {
                 sendUiEffect(UiEffect.ShowToast(result.data.uid))
-                sendUiEffect(UiEffect.NavigateToHome)
+                sendUiEffect(UiEffect.NavigateToHomeScreen)
             }
 
             is Resource.Error -> {

@@ -17,17 +17,17 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.yasinmaden.logincore.R
-import com.yasinmaden.logincore.presentation.auth.signup.SignupContract
+import com.yasinmaden.logincore.presentation.auth.signup.SignUpContract
 
 @Composable
 fun SignupPasswordField(
-    uiState: SignupContract.UiState,
-    onAction: (SignupContract.UiAction) -> Unit,
+    uiState: SignUpContract.UiState,
+    onAction: (SignUpContract.UiAction) -> Unit,
     trailingIcon: ImageVector
 ) {
     OutlinedTextField(
         value = uiState.password,
-        onValueChange = { onAction(SignupContract.UiAction.OnPasswordChange(it)) },
+        onValueChange = { onAction(SignUpContract.UiAction.OnPasswordChange(it)) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
@@ -36,7 +36,7 @@ fun SignupPasswordField(
         supportingText = { Text("Enter your password") },
         singleLine = true,
         isError = uiState.isPasswordError,
-        visualTransformation = if (uiState.passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+        visualTransformation = if (uiState.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         leadingIcon = {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_password),
@@ -45,7 +45,7 @@ fun SignupPasswordField(
         },
         trailingIcon = {
             IconButton(
-                onClick = { onAction(SignupContract.UiAction.OnPasswordVisibilityChange) }
+                onClick = { onAction(SignUpContract.UiAction.OnPasswordVisibilityToggle) }
             ) {
                 Icon(
                     imageVector = trailingIcon,

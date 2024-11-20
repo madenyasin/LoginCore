@@ -1,6 +1,5 @@
 package com.yasinmaden.logincore.presentation.main.profile
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,17 +35,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.yasinmaden.logincore.R
+import com.yasinmaden.logincore.presentation.navigation.Screen
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -104,9 +102,9 @@ fun ProfileContent(
             onClick = { /* TODO: Navigate to notifications screen */ }
         )
         ProfileOptions(
-            icon = ImageVector.vectorResource(R.drawable.ic_logout),
-            text = "Log Out",
-            onClick = { onAction.invoke(ProfileContract.UiAction.Logout) }
+            icon = ImageVector.vectorResource(R.drawable.ic_sign_out),
+            text = "Sign Out",
+            onClick = { onAction.invoke(ProfileContract.UiAction.SignOut) }
         )
     }
 }
@@ -135,9 +133,9 @@ fun ProfileCard(
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.inversePrimary)
                 ) {
-                    if (uiState.imageUrl != "null") {
+                    if (uiState.profileImageUrl != "null") {
                         AsyncImage(
-                            model = uiState.imageUrl,
+                            model = uiState.profileImageUrl,
                             contentDescription = "Profile Picture",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
@@ -221,9 +219,9 @@ fun HandleProfileUiEffects(
     LaunchedEffect(true) {
         uiEffect.collect { effect ->
             when (effect) {
-                ProfileContract.UiEffect.NavigateToLogin -> {
-                    navController.navigate("login") {
-                        popUpTo("home") {
+                ProfileContract.UiEffect.NavigateToSignInScreen -> {
+                    navController.navigate(Screen.SignIn.route) {
+                        popUpTo(Screen.Home.route) {
                             inclusive = true
                         }
                     }
@@ -245,7 +243,7 @@ fun ProfileScreenPreview() {
             name = "John Doe",
             email = "john.mclean@examplepetstore.com",
             phoneNumber = "123-456-7890",
-            imageUrl = "null"
+            profileImageUrl = "null"
         ),
         uiEffect = flowOf(),
         onAction = {},

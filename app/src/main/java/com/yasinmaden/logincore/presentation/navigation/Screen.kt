@@ -4,23 +4,23 @@ sealed class Screen(
     val title: String,
     val route: String,
 ) {
-    object Home : Screen(
+    data object Home : Screen(
         title = "Home",
         route = "home",
     )
-    object Profile : Screen(
+    data object Profile : Screen(
         title = "Profile",
         route = "profile",
     )
-    object Login : Screen(
-        title = "Login",
-        route = "login",
+    data object SignIn : Screen(
+        title = "signin",
+        route = "signin",
     )
-    object Signup : Screen(
+    data object SignUp : Screen(
         title = "signup",
         route = "signup",
     )
-    object Settings : Screen(
+    data object Settings : Screen(
         title = "Settings",
         route = "settings",
     )

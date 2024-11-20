@@ -8,16 +8,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.yasinmaden.logincore.presentation.auth.signup.SignupContract
+import com.yasinmaden.logincore.presentation.auth.signup.SignUpContract
 
 @Composable
 fun SignupButtonSection(
-    uiState: SignupContract.UiState,
-    onAction: (SignupContract.UiAction) -> Unit
+    uiState: SignUpContract.UiState,
+    onAction: (SignUpContract.UiAction) -> Unit
 ){
     Button(
         onClick = {
-            onAction(SignupContract.UiAction.OnSignUpClick)
+            onAction(SignUpContract.UiAction.OnSignUpClick)
         },
         modifier = Modifier
             .fillMaxWidth()

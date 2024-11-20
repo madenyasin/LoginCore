@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinmaden.logincore.common.Resource
 import com.yasinmaden.logincore.domain.repository.AuthRepository
-import com.yasinmaden.logincore.presentation.auth.signup.SignupContract.UiAction
-import com.yasinmaden.logincore.presentation.auth.signup.SignupContract.UiEffect
-import com.yasinmaden.logincore.presentation.auth.signup.SignupContract.UiEffect.OnNavigateToLoginScreen
-import com.yasinmaden.logincore.presentation.auth.signup.SignupContract.UiState
+import com.yasinmaden.logincore.presentation.auth.signup.SignUpContract.UiAction
+import com.yasinmaden.logincore.presentation.auth.signup.SignUpContract.UiEffect
+import com.yasinmaden.logincore.presentation.auth.signup.SignUpContract.UiEffect.NavigateToSignInScreen
+import com.yasinmaden.logincore.presentation.auth.signup.SignUpContract.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignupViewModel @Inject constructor(
+class SignUpViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
@@ -44,20 +44,20 @@ class SignupViewModel @Inject constructor(
                 )
             }
 
-            UiAction.OnPasswordVisibilityChange -> updateUiState {
+            UiAction.OnPasswordVisibilityToggle -> updateUiState {
                 copy(
-                    passwordVisibility = !_uiState.value.passwordVisibility
+                    isPasswordVisible = !_uiState.value.isPasswordVisible
                 )
             }
 
-            UiAction.OnConfirmPasswordVisibilityChange -> updateUiState {
+            UiAction.OnConfirmPasswordVisibilityToggle -> updateUiState {
                 copy(
-                    confirmPasswordVisibility = !_uiState.value.confirmPasswordVisibility
+                    isConfirmPasswordVisible = !_uiState.value.isConfirmPasswordVisible
                 )
             }
 
-            UiAction.OnSignInTextClick -> viewModelScope.launch {
-                sendUiEffect(OnNavigateToLoginScreen)
+            UiAction.OnSignInClick -> viewModelScope.launch {
+                sendUiEffect(NavigateToSignInScreen)
             }
 
             is UiAction.OnSignUpClick -> signUp()
@@ -79,14 +79,14 @@ class SignupViewModel @Inject constructor(
             return@launch
         }
 
-        when (val result = authRepository.signUp(
+        when (val result = authRepository.signUpWithEmailAndPassword(
             uiState.value.email,
             uiState.value.password,
             uiState.value.confirmPassword,
             uiState.value.name
         )) {
             is Resource.Success -> {
-                sendUiEffect(UiEffect.NavigateToHome)
+                sendUiEffect(UiEffect.NavigateToHomeScreen)
                 sendUiEffect(UiEffect.ShowToast(result.data.uid))
             }
 
