@@ -10,21 +10,45 @@ import com.yasinmaden.logincore.domain.model.User
 import com.yasinmaden.logincore.domain.repository.AuthRepository
 import com.yasinmaden.logincore.domain.repository.UserRepository
 import com.yasinmaden.logincore.utils.GoogleSignInHelper
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
 class AuthRepositoryImpl @Inject constructor(
-    private val auth: FirebaseAuth,
+    private val firebaseAuth: FirebaseAuth,
     private val credentialManager: CredentialManager,
     private val userRepository: UserRepository,
-    private val googleSignInHelper: GoogleSignInHelper
-) : AuthRepository {
-    override fun isUserLoggedIn(): Boolean = auth.currentUser != null
+    private val googleSignInHelper: GoogleSignInHelper,
 
-    override suspend fun signInWithEmailAndPassword(email: String, password: String): Resource<User> {
+    ) : AuthRepository {
+    private val _authStateFlow = MutableStateFlow(firebaseAuth.currentUser != null)
+
+    override val authStateFlow: StateFlow<Boolean> = _authStateFlow
+    private val authStateListener = FirebaseAuth.AuthStateListener { auth ->
+        _authStateFlow.value = auth.currentUser != null
+
+    }
+
+    override fun addAuthStateListener() {
+        firebaseAuth.addAuthStateListener(authStateListener)
+    }
+
+    override fun removeAuthStateListener() {
+        firebaseAuth.removeAuthStateListener(authStateListener)
+    }
+
+
+
+    override fun isUserLoggedIn(): Boolean = firebaseAuth.currentUser != null
+
+    override suspend fun signInWithEmailAndPassword(
+        email: String,
+        password: String
+    ): Resource<User> {
         return try {
-            auth.signInWithEmailAndPassword(email, password).await()
+            firebaseAuth.signInWithEmailAndPassword(email, password).await()
 
             val userResource = userRepository.getCurrentUser()
             if (userResource is Resource.Success) {
@@ -47,7 +71,7 @@ class AuthRepositoryImpl @Inject constructor(
             return Resource.Error(Exception("Passwords do not match"))
         }
         return try {
-            val result = auth.createUserWithEmailAndPassword(email, password).await()
+            val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
 
             val user = User(
                 uid = result.user?.uid.orEmpty(),
@@ -67,7 +91,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun signOut(): Resource<String> {
         return try {
-            auth.signOut()
+            firebaseAuth.signOut()
 
             credentialManager.clearCredentialState(
                 ClearCredentialStateRequest(
@@ -82,7 +106,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun sendResetPasswordEmail(email: String): Resource<String> {
         return try {
-            auth.sendPasswordResetEmail(email).await()
+            firebaseAuth.sendPasswordResetEmail(email).await()
             Resource.Success("Password reset email sent")
         } catch (e: Exception) {
             Resource.Error(e)
@@ -102,7 +126,7 @@ class AuthRepositoryImpl @Inject constructor(
                 activityContext = activityContext
             )
             val firebaseCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
-            val authResult = auth.signInWithCredential(firebaseCredential).await()
+            val authResult = firebaseAuth.signInWithCredential(firebaseCredential).await()
 
             val currentUser = authResult.user
 
