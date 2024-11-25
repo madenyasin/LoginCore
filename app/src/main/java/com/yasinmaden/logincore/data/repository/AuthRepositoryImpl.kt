@@ -1,6 +1,7 @@
 package com.yasinmaden.logincore.data.repository
 
 import android.content.Context
+import android.util.Log
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import com.google.firebase.auth.FirebaseAuth
@@ -53,10 +54,14 @@ class AuthRepositoryImpl @Inject constructor(
             val userResource = userRepository.getCurrentUser()
             if (userResource is Resource.Success) {
                 Resource.Success(userResource.data)
+            } else if (userResource is Resource.Error) {
+                Log.e("SignIn", "Error getting user data: ${userResource.exception?.message}")
+                Resource.Error(Exception("Failed to get user data: ${userResource.exception?.message}"))
             } else {
                 Resource.Error(Exception("Failed to get user data"))
             }
         } catch (e: Exception) {
+            Log.e("SignIn", "Sign-in error: ${e.message}")
             Resource.Error(e)
         }
     }
