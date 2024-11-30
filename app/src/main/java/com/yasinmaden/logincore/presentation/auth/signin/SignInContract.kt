@@ -5,6 +5,7 @@ import android.content.Context
 object SignInContract {
 
     data class UiState(
+        val isLoading: Boolean = false,
         val email: String = "",
         val password: String = "",
         val resetEmail: String = "",

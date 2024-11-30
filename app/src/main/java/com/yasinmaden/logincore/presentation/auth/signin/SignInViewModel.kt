@@ -66,6 +66,7 @@ class SignInViewModel @Inject constructor(
     }
 
     private fun signInWithEmailAndPassword() = viewModelScope.launch {
+        updateUiState { copy(isLoading = true) }
 
         val isEmailError = uiState.value.email.isEmpty()
         val isPasswordError = uiState.value.password.isEmpty()
@@ -74,51 +75,67 @@ class SignInViewModel @Inject constructor(
             updateUiState {
                 copy(
                     isEmailError = isEmailError,
-                    isPasswordError = isPasswordError
+                    isPasswordError = isPasswordError,
+                    isLoading = false
                 )
             }
             return@launch
         }
 
-        when (val result = authRepository.signInWithEmailAndPassword(
-            email = uiState.value.email,
-            password = uiState.value.password
-        )) {
-            is Resource.Success -> {
-                sendUiEffect(UiEffect.NavigateToHomeScreen)
-                sendUiEffect(UiEffect.ShowToast(result.data.uid))
-            }
+        try {
+            when (val result = authRepository.signInWithEmailAndPassword(
+                email = uiState.value.email,
+                password = uiState.value.password
+            )) {
+                is Resource.Success -> {
+                    sendUiEffect(UiEffect.NavigateToHomeScreen)
+                    sendUiEffect(UiEffect.ShowToast(result.data.uid))
+                }
 
-            is Resource.Error -> {
-                sendUiEffect(UiEffect.ShowToast(result.exception.message.toString()))
+                is Resource.Error -> {
+                    sendUiEffect(UiEffect.ShowToast(result.exception.message.toString()))
+                }
             }
+        } finally {
+            updateUiState { copy(isLoading = false) }
         }
     }
 
     private fun sendResetPasswordEmail() = viewModelScope.launch {
-        when (val result =
-            authRepository.sendResetPasswordEmail(uiState.value.resetEmail)) {
-            is Resource.Success -> {
-                hideResetDialog()
-                sendUiEffect(UiEffect.ShowToast(result.data))
-            }
+        updateUiState { copy(isLoading = true) }
 
-            is Resource.Error -> {
-                sendUiEffect(UiEffect.ShowToast(result.exception.message.toString()))
+        try {
+            when (val result = authRepository.sendResetPasswordEmail(uiState.value.resetEmail)) {
+                is Resource.Success -> {
+                    hideResetDialog()
+                    sendUiEffect(UiEffect.ShowToast(result.data))
+                }
+
+                is Resource.Error -> {
+                    sendUiEffect(UiEffect.ShowToast(result.exception.message.toString()))
+                }
             }
+        } finally {
+            updateUiState { copy(isLoading = false) }
         }
     }
 
     private fun signInWithGoogle(context: Context) = viewModelScope.launch {
-        when (val result = authRepository.signInWithGoogle(activityContext = context)) {
-            is Resource.Success -> {
-                sendUiEffect(UiEffect.ShowToast(result.data.uid))
-                sendUiEffect(UiEffect.NavigateToHomeScreen)
-            }
+        updateUiState { copy(isLoading = true) }
 
-            is Resource.Error -> {
-                sendUiEffect(UiEffect.ShowToast(result.exception.message.toString()))
+        try {
+            when (val result = authRepository.signInWithGoogle(activityContext = context)) {
+                is Resource.Success -> {
+                    sendUiEffect(UiEffect.ShowToast(result.data.uid))
+                    sendUiEffect(UiEffect.NavigateToHomeScreen)
+                }
+
+                is Resource.Error -> {
+                    sendUiEffect(UiEffect.ShowToast(result.exception.message.toString()))
+                }
             }
+        } finally {
+            updateUiState { copy(isLoading = false) }
         }
     }
 
