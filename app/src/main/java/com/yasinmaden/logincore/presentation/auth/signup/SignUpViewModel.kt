@@ -74,6 +74,7 @@ class SignUpViewModel @Inject constructor(
     }
 
     private fun signUp() = viewModelScope.launch {
+        updateUiState { copy(isLoading = true) }
 
         val isNameError = uiState.value.name.isEmpty()
         val isEmailError = uiState.value.email.isEmpty()
@@ -86,6 +87,7 @@ class SignUpViewModel @Inject constructor(
                 isEmailError = isEmailError,
                 isPasswordError = isPasswordError,
                 isConfirmPasswordError = isConfirmPasswordError,
+                isLoading = false
             )
         }
 
@@ -93,20 +95,23 @@ class SignUpViewModel @Inject constructor(
             return@launch
         }
 
-        when (val result = authRepository.signUpWithEmailAndPassword(
-            uiState.value.email,
-            uiState.value.password,
-            uiState.value.confirmPassword,
-            uiState.value.name
-        )) {
-            is Resource.Success -> {
-                sendUiEffect(UiEffect.NavigateToHomeScreen)
-                sendUiEffect(UiEffect.ShowToast(result.data.uid))
+        try {
+            when (val result = authRepository.signUpWithEmailAndPassword(
+                email = uiState.value.email,
+                password = uiState.value.password,
+                confirmPassword = uiState.value.confirmPassword,
+                name = uiState.value.name
+            )) {
+                is Resource.Success -> {
+                    sendUiEffect(UiEffect.NavigateToHomeScreen)
+                    sendUiEffect(UiEffect.ShowToast(result.data.uid))
+                }
+
+                is Resource.Error -> sendUiEffect(UiEffect.ShowToast(result.exception.message.toString()))
             }
-
-            is Resource.Error -> sendUiEffect(UiEffect.ShowToast(result.exception.message.toString()))
+        } finally {
+            updateUiState { copy(isLoading = false) }
         }
-
     }
 
 
