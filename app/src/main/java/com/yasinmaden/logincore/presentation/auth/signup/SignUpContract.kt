@@ -16,15 +16,17 @@ object SignUpContract {
         )
 
     sealed class UiAction {
-        data class OnNameChange(val name: String) : UiAction()
-        data class OnEmailChange(val email: String) : UiAction()
-        data class OnPasswordChange(val password: String) : UiAction()
-        data class OnConfirmPasswordChange(val confirmPassword: String) : UiAction()
-
         data object OnSignUpClick : UiAction()
-        data object OnSignInClick: UiAction()
+        data object OnSignInClick : UiAction()
         data object OnPasswordVisibilityToggle : UiAction()
         data object OnConfirmPasswordVisibilityToggle : UiAction()
+
+        data class OnFormChange(
+            val name: String? = null,
+            val email: String? = null,
+            val password: String? = null,
+            val confirmPassword: String? = null
+        ) : UiAction()
 
     }
 

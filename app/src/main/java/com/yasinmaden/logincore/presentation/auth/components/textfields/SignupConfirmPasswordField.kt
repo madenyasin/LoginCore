@@ -24,10 +24,10 @@ fun SignupConfirmPasswordField(
     uiState: SignUpContract.UiState,
     onAction: (SignUpContract.UiAction) -> Unit,
     trailingIcon: ImageVector
-){
+) {
     OutlinedTextField(
         value = uiState.confirmPassword,
-        onValueChange = { onAction(SignUpContract.UiAction.OnConfirmPasswordChange(it)) },
+        onValueChange = { onAction(SignUpContract.UiAction.OnFormChange(confirmPassword = it)) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),

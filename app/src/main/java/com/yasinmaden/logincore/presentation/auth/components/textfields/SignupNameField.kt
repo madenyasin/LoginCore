@@ -20,10 +20,10 @@ fun SignupNameField(
     uiState: SignUpContract.UiState,
     onAction: (SignUpContract.UiAction) -> Unit,
     modifier: Modifier = Modifier
-){
+) {
     OutlinedTextField(
         value = uiState.name,
-        onValueChange = { onAction(SignUpContract.UiAction.OnNameChange(it)) },
+        onValueChange = { onAction(SignUpContract.UiAction.OnFormChange(name = it)) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
