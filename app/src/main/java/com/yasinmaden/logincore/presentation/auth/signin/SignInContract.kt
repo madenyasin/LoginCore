@@ -15,10 +15,6 @@ object SignInContract {
     )
 
     sealed class UiAction {
-        data class OnEmailChange(val email: String) : UiAction()
-        data class OnResetEmailChange(val email: String) : UiAction()
-        data class OnPasswordChange(val password: String) : UiAction()
-        data class OnGoogleSignInClick(val context: Context) : UiAction()
 
         data object OnSignInClick : UiAction()
         data object OnPasswordVisibilityToggle : UiAction()
@@ -27,6 +23,14 @@ object SignInContract {
         data object OnResetDialogConfirm : UiAction()
         data object OnResetDialogDismiss : UiAction()
         data object OnResetDialogDismissRequest : UiAction()
+
+        data class OnGoogleSignInClick(val context: Context) : UiAction()
+
+        data class OnCredentialChange(
+            val email: String? = null,
+            val password: String? = null,
+            val resetEmail: String? = null
+        ) : UiAction()
     }
 
     sealed class UiEffect {

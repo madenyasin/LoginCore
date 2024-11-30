@@ -18,13 +18,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.yasinmaden.logincore.R
 import com.yasinmaden.logincore.presentation.auth.signin.SignInContract
-import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiAction.OnPasswordChange
+import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiAction
 import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiAction.OnPasswordVisibilityToggle
 
 @Composable
 fun SignInPasswordField(
     uiState: SignInContract.UiState,
-    onAction: (SignInContract.UiAction) -> Unit,
+    onAction: (UiAction) -> Unit,
     modifier: Modifier = Modifier,
 ){
     val visibilityIcon = if (uiState.isPasswordVisible) {
@@ -35,7 +35,7 @@ fun SignInPasswordField(
 
     OutlinedTextField(
         value = uiState.password,
-        onValueChange = { onAction(OnPasswordChange(it)) },
+        onValueChange = { onAction(UiAction.OnCredentialChange(password = it)) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),

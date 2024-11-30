@@ -1,14 +1,13 @@
 package com.yasinmaden.logincore.presentation.auth.signin
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasinmaden.logincore.common.Resource
 import com.yasinmaden.logincore.domain.repository.AuthRepository
 import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiAction
-import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiState
 import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiEffect
+import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiState
 import com.yasinmaden.logincore.presentation.global.ObserveAuthStateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -26,84 +25,65 @@ class SignInViewModel @Inject constructor(
     private val observeAuthStateUseCase: ObserveAuthStateUseCase
 ) : ViewModel() {
 
+
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
 
     private val _uiEffect by lazy { Channel<UiEffect>() }
     val uiEffect by lazy { _uiEffect.receiveAsFlow() }
 
-    private val _isAuthenticated = MutableStateFlow(false)
-    val isAuthenticated = _isAuthenticated.asStateFlow()
+    init {
+        viewModelScope.launch {
+            delay(100)
+            observeAuthState()
+        }
+    }
 
     fun onAction(uiAction: UiAction) {
+
         when (uiAction) {
 
-            is UiAction.OnEmailChange -> updateUiState { copy(email = uiAction.email) }
-
-            is UiAction.OnPasswordChange -> updateUiState { copy(password = uiAction.password) }
-
-            UiAction.OnPasswordVisibilityToggle -> updateUiState { copy(isPasswordVisible = !_uiState.value.isPasswordVisible) }
-
-            UiAction.OnSignUpClick -> viewModelScope.launch { sendUiEffect(UiEffect.NavigateToSignUpScreen) }
-
-            UiAction.OnForgotPasswordClick -> updateUiState {
-                copy(
-                    isResetDialogVisible = !_uiState.value.isResetDialogVisible
-                )
-            }
-
-            UiAction.OnResetDialogDismiss -> updateUiState {
-                copy(
-                    isResetDialogVisible = false
-                )
-            }
-
-            UiAction.OnResetDialogDismissRequest -> updateUiState {
-                copy(
-                    isResetDialogVisible = false
-                )
-            }
-
-            is UiAction.OnResetEmailChange -> updateUiState { copy(resetEmail = uiAction.email) }
-            UiAction.OnResetDialogConfirm -> sendResetPasswordEmail()
-
-            is UiAction.OnSignInClick -> signInWithEmailAndPassword()
+            is UiAction.OnCredentialChange -> handleCredentialChange(uiAction)
             is UiAction.OnGoogleSignInClick -> signInWithGoogle(uiAction.context)
+
+            UiAction.OnSignInClick -> signInWithEmailAndPassword()
+            UiAction.OnSignUpClick -> viewModelScope.launch { sendUiEffect(UiEffect.NavigateToSignUpScreen) }
+            UiAction.OnResetDialogConfirm -> sendResetPasswordEmail()
+            UiAction.OnPasswordVisibilityToggle -> togglePasswordVisibility()
+            UiAction.OnForgotPasswordClick -> toggleResetDialogVisibility()
+            UiAction.OnResetDialogDismissRequest -> hideResetDialog()
+            UiAction.OnResetDialogDismiss -> hideResetDialog()
         }
     }
 
-    init {
-        Log.d("debugs", "SignInViewModel initialized")
-        _isAuthenticated.value = observeAuthStateUseCase.authStateFlow.value
-        Log.d("debugs", "auth state: ${observeAuthStateUseCase.authStateFlow.value}")
-        Log.d("debugs", "isUserLoggedIn(): ${authRepository.isUserLoggedIn()}")
+    private fun observeAuthState() = viewModelScope.launch {
 
-        viewModelScope.launch {
-            delay(1000) // 1 saniye bekle
-            // Gecikmeden sonra yapılacak işlemler
-            isUserLoggedIn()
-            Log.d("debugs", "auth state: ${observeAuthStateUseCase.authStateFlow.value}")
-            Log.d("debugs", "isUserLoggedIn(): ${authRepository.isUserLoggedIn()}")
+        observeAuthStateUseCase.authStateFlow.collect { isAuth ->
+            if (isAuth && authRepository.isUserLoggedIn()) {
+                sendUiEffect(UiEffect.NavigateToHomeScreen)
+            }
         }
-
-    }
-
-    private fun isUserLoggedIn() = viewModelScope.launch {
-        if (isAuthenticated.value and authRepository.isUserLoggedIn())
-            sendUiEffect(UiEffect.NavigateToHomeScreen)
     }
 
     private fun signInWithEmailAndPassword() = viewModelScope.launch {
-        updateUiState {
-            copy(
-                isEmailError = uiState.value.email.isEmpty(),
-                isPasswordError = uiState.value.password.isEmpty()
-            )
-        }
-        if (uiState.value.isEmailError || uiState.value.isPasswordError)
-            return@launch
 
-        when (val result = authRepository.signInWithEmailAndPassword(uiState.value.email, uiState.value.password)) {
+        val isEmailError = uiState.value.email.isEmpty()
+        val isPasswordError = uiState.value.password.isEmpty()
+
+        if (isEmailError || isPasswordError) {
+            updateUiState {
+                copy(
+                    isEmailError = isEmailError,
+                    isPasswordError = isPasswordError
+                )
+            }
+            return@launch
+        }
+
+        when (val result = authRepository.signInWithEmailAndPassword(
+            email = uiState.value.email,
+            password = uiState.value.password
+        )) {
             is Resource.Success -> {
                 sendUiEffect(UiEffect.NavigateToHomeScreen)
                 sendUiEffect(UiEffect.ShowToast(result.data.uid))
@@ -119,7 +99,7 @@ class SignInViewModel @Inject constructor(
         when (val result =
             authRepository.sendResetPasswordEmail(uiState.value.resetEmail)) {
             is Resource.Success -> {
-                updateUiState { copy(isResetDialogVisible = false) }
+                hideResetDialog()
                 sendUiEffect(UiEffect.ShowToast(result.data))
             }
 
@@ -140,6 +120,28 @@ class SignInViewModel @Inject constructor(
                 sendUiEffect(UiEffect.ShowToast(result.exception.message.toString()))
             }
         }
+    }
+
+    private fun handleCredentialChange(uiAction: UiAction.OnCredentialChange) {
+        updateUiState {
+            copy(
+                email = uiAction.email ?: email,
+                password = uiAction.password ?: password,
+                resetEmail = uiAction.resetEmail ?: resetEmail
+            )
+        }
+    }
+
+    private fun togglePasswordVisibility() {
+        updateUiState { copy(isPasswordVisible = !isPasswordVisible) }
+    }
+
+    private fun toggleResetDialogVisibility() {
+        updateUiState { copy(isResetDialogVisible = !isResetDialogVisible) }
+    }
+
+    private fun hideResetDialog() {
+        updateUiState { copy(isResetDialogVisible = false) }
     }
 
     private fun updateUiState(block: UiState.() -> UiState) {

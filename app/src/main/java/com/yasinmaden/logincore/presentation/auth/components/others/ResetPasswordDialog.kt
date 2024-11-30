@@ -23,13 +23,13 @@ fun ResetPasswordDialog(
     uiState: SignInContract.UiState,
     onAction: (UiAction) -> Unit,
     modifier: Modifier = Modifier,
-){
+) {
     AlertDialog(
         title = { Text(text = "Reset Password") },
         text = {
             OutlinedTextField(
                 value = uiState.resetEmail,
-                onValueChange = { onAction(UiAction.OnResetEmailChange(it)) },
+                onValueChange = { onAction(UiAction.OnCredentialChange(resetEmail = it)) },
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text(text = "Email") },
                 placeholder = { Text(text = "Enter your email") },
