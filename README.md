@@ -13,18 +13,13 @@ This project is a reusable template for login functionality in Android apps. It 
 
 ## Getting Started
 
-### Prerequisites
-
-- Android Studio Flamingo or newer.
-- A Firebase project with authentication turned on.
-
 ### Setup
 
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
-   cd your-repo-name
+   git clone https://github.com/madenyasin/LoginCore/
+   cd LoginCore
    ```
 
 2. **Connect to Firebase**:
@@ -37,7 +32,7 @@ This project is a reusable template for login functionality in Android apps. It 
    - Go to `res/values/strings.xml`.
    - Add your `WEB_CLIENT_ID` from Firebase:
      ```xml
-     <string name="web_client_id">YOUR_WEB_CLIENT_ID</string>
+     <string name="WEB_CLIENT_ID">YOUR_WEB_CLIENT_ID</string>
      ```
 
 4. **Build and Run**:
