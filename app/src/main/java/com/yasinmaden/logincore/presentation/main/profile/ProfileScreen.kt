@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -85,10 +86,16 @@ fun ProfileContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
     ) {
-        ProfileCard(
-            uiState = uiState,
-            onAction = onAction
-        )
+        if (uiState.isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+        } else {
+            ProfileCard(
+                uiState = uiState,
+                onAction = onAction
+            )
+        }
 
         HorizontalDivider()
         ProfileOptions(
@@ -155,7 +162,9 @@ fun ProfileCard(
                 }
 
                 IconButton(
-                    onClick = { },
+                    onClick = {
+                        // TODO: Edit profile picture
+                    },
                     modifier = Modifier
                         .size(24.dp)
                         .align(Alignment.BottomEnd)
@@ -173,7 +182,6 @@ fun ProfileCard(
             Column {
                 Text(text = uiState.name, style = MaterialTheme.typography.titleLarge)
                 Text(text = uiState.email, style = MaterialTheme.typography.bodyMedium)
-                Text(uiState.phoneNumber, style = MaterialTheme.typography.bodyMedium)
             }
         }
     }
@@ -242,7 +250,6 @@ fun ProfileScreenPreview() {
         uiState = ProfileContract.UiState(
             name = "John Doe",
             email = "john.mclean@examplepetstore.com",
-            phoneNumber = "123-456-7890",
             profileImageUrl = "null"
         ),
         uiEffect = flowOf(),

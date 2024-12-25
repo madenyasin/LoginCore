@@ -14,17 +14,17 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.yasinmaden.logincore.presentation.auth.signin.SignInContract
-import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiAction.OnEmailChange
+import com.yasinmaden.logincore.presentation.auth.signin.SignInContract.UiAction
 
 @Composable
 fun SignInEmailField(
     uiState: SignInContract.UiState,
-    onAction: (SignInContract.UiAction) -> Unit,
+    onAction: (UiAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
         value = uiState.email,
-        onValueChange = { onAction(OnEmailChange(it)) },
+        onValueChange = { onAction(UiAction.OnCredentialChange(email = it)) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),

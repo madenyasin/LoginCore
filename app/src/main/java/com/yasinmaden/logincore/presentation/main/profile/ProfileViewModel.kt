@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.yasinmaden.logincore.common.Resource
 import com.yasinmaden.logincore.domain.repository.AuthRepository
+import com.yasinmaden.logincore.domain.repository.UserRepository
 import com.yasinmaden.logincore.presentation.global.ObserveAuthStateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val auth: FirebaseAuth,
+    private val userRepository: UserRepository,
+    private val firebaseAuth: FirebaseAuth,
     private val observeAuthStateUseCase: ObserveAuthStateUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProfileContract.UiState())
@@ -35,7 +37,10 @@ class ProfileViewModel @Inject constructor(
     fun onAction(uiAction: ProfileContract.UiAction) {
         when (uiAction) {
             ProfileContract.UiAction.SignOut -> signOut()
-            ProfileContract.UiAction.LoadProfile -> loadUiState()
+            ProfileContract.UiAction.LoadProfile -> viewModelScope.launch {
+                loadUiState()
+            }
+
             ProfileContract.UiAction.OnEditProfilePictureClick -> {
                 //TODO: Edit profile picture
             }
@@ -60,21 +65,30 @@ class ProfileViewModel @Inject constructor(
         }
 
     }
+
     private fun isUserAuthenticated() {
-        if(!isAuthenticated.value and !authRepository.isUserLoggedIn()){
+        if (!isAuthenticated.value and !authRepository.isUserLoggedIn()) {
             viewModelScope.launch {
                 sendUiEffect(ProfileContract.UiEffect.NavigateToSignInScreen)
             }
         }
     }
-    private fun loadUiState() {
-        updateUiState {
-            copy(
-                name = auth.currentUser?.displayName.toString(),
-                email = auth.currentUser?.email.toString(),
-                profileImageUrl = auth.currentUser?.photoUrl.toString(),
-                phoneNumber = auth.currentUser?.phoneNumber.toString()
-            )
+
+    private suspend fun loadUiState() {
+        updateUiState { copy(isLoading = true) }
+        val currentUser = userRepository.getCurrentUser()
+        if (currentUser is Resource.Success) {
+            updateUiState {
+                copy(
+                    isLoading = false,
+                    name = currentUser.data.name,
+                    email = currentUser.data.email,
+                    profileImageUrl = currentUser.data.photoUrl ?: ""
+                )
+            }
+        } else {
+            updateUiState { copy(isLoading = false) }
+            sendUiEffect(ProfileContract.UiEffect.ShowToast("Error loading profile"))
         }
     }
 

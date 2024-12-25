@@ -1,11 +1,12 @@
 package com.yasinmaden.logincore.presentation.main.profile
 
+import com.yasinmaden.logincore.domain.model.User
+
 object ProfileContract {
     data class UiState(
         val isLoading: Boolean = false,
         val name: String = "",
         val email: String = "",
-        val phoneNumber: String = "",
         val profileImageUrl: String = ""
     )
 

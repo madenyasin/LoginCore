@@ -19,8 +19,15 @@ navigationCompose = "2.8.4"
 credentials = "1.5.0-beta01"
 googleid = "1.1.1"
 credentialsPlayServicesAuth = "1.5.0-beta01"
+supabase = "3.0.2"
+ktor = "3.0.1"
 
 [libraries]
+supabase-bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "supabase" }
+supabase-postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
+supabase-storage-kt = { module = "io.github.jan-tennert.supabase:storage-kt" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+
 androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
 coil3-coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilNetworkOkhttp" }
@@ -56,4 +63,6 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 gms = { id = "com.google.gms.google-services", version.ref = "gms" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
 

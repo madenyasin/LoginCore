@@ -22,7 +22,7 @@ fun SignupEmailField(
 ){
     OutlinedTextField(
         value = uiState.email,
-        onValueChange = { onAction(SignUpContract.UiAction.OnEmailChange(it)) },
+        onValueChange = { onAction(SignUpContract.UiAction.OnFormChange(email = it)) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),

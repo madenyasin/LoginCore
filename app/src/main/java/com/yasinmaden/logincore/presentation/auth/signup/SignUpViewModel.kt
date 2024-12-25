@@ -30,48 +30,64 @@ class SignUpViewModel @Inject constructor(
     fun onAction(uiAction: UiAction) {
         when (uiAction) {
 
-            is UiAction.OnEmailChange -> updateUiState { copy(email = uiAction.email) }
-
-
-            is UiAction.OnPasswordChange -> updateUiState { copy(password = uiAction.password) }
-
-            is UiAction.OnNameChange -> updateUiState { copy(name = uiAction.name) }
-
-
-            is UiAction.OnConfirmPasswordChange -> updateUiState {
-                copy(
-                    confirmPassword = uiAction.confirmPassword
-                )
-            }
-
-            UiAction.OnPasswordVisibilityToggle -> updateUiState {
-                copy(
-                    isPasswordVisible = !_uiState.value.isPasswordVisible
-                )
-            }
-
-            UiAction.OnConfirmPasswordVisibilityToggle -> updateUiState {
-                copy(
-                    isConfirmPasswordVisible = !_uiState.value.isConfirmPasswordVisible
-                )
-            }
-
-            UiAction.OnSignInClick -> viewModelScope.launch {
-                sendUiEffect(NavigateToSignInScreen)
-            }
+            UiAction.OnSignInClick -> navigateToSignIn()
+            UiAction.OnPasswordVisibilityToggle -> togglePasswordVisibility()
+            UiAction.OnConfirmPasswordVisibilityToggle -> toggleConfirmPasswordVisibility()
 
             is UiAction.OnSignUpClick -> signUp()
+            is UiAction.OnFormChange -> updateForm(uiAction)
+        }
+    }
+
+
+    private fun togglePasswordVisibility() {
+        updateUiState {
+            copy(
+                isPasswordVisible = !isPasswordVisible
+            )
+        }
+    }
+
+    private fun toggleConfirmPasswordVisibility() {
+        updateUiState {
+            copy(
+                isConfirmPasswordVisible = !isConfirmPasswordVisible
+            )
+        }
+    }
+
+    private fun navigateToSignIn() {
+        viewModelScope.launch {
+            sendUiEffect(NavigateToSignInScreen)
+        }
+    }
+
+    private fun updateForm(uiAction: UiAction.OnFormChange) {
+        updateUiState {
+            copy(
+                name = uiAction.name ?: name,
+                email = uiAction.email ?: email,
+                password = uiAction.password ?: password,
+                confirmPassword = uiAction.confirmPassword ?: confirmPassword
+            )
         }
     }
 
     private fun signUp() = viewModelScope.launch {
+        updateUiState { copy(isLoading = true) }
+
+        val isNameError = uiState.value.name.isEmpty()
+        val isEmailError = uiState.value.email.isEmpty()
+        val isPasswordError = uiState.value.password.isEmpty()
+        val isConfirmPasswordError = uiState.value.confirmPassword.isEmpty()
 
         updateUiState {
             copy(
-                isNameError = uiState.value.name.isEmpty(),
-                isEmailError = uiState.value.email.isEmpty(),
-                isPasswordError = uiState.value.password.isEmpty(),
-                isConfirmPasswordError = uiState.value.confirmPassword.isEmpty()
+                isNameError = isNameError,
+                isEmailError = isEmailError,
+                isPasswordError = isPasswordError,
+                isConfirmPasswordError = isConfirmPasswordError,
+                isLoading = false
             )
         }
 
@@ -79,20 +95,23 @@ class SignUpViewModel @Inject constructor(
             return@launch
         }
 
-        when (val result = authRepository.signUpWithEmailAndPassword(
-            uiState.value.email,
-            uiState.value.password,
-            uiState.value.confirmPassword,
-            uiState.value.name
-        )) {
-            is Resource.Success -> {
-                sendUiEffect(UiEffect.NavigateToHomeScreen)
-                sendUiEffect(UiEffect.ShowToast(result.data.uid))
+        try {
+            when (val result = authRepository.signUpWithEmailAndPassword(
+                email = uiState.value.email,
+                password = uiState.value.password,
+                confirmPassword = uiState.value.confirmPassword,
+                name = uiState.value.name
+            )) {
+                is Resource.Success -> {
+                    sendUiEffect(UiEffect.NavigateToHomeScreen)
+                    sendUiEffect(UiEffect.ShowToast(result.data.uid))
+                }
+
+                is Resource.Error -> sendUiEffect(UiEffect.ShowToast(result.exception.message.toString()))
             }
-
-            is Resource.Error -> sendUiEffect(UiEffect.ShowToast(result.exception.message.toString()))
+        } finally {
+            updateUiState { copy(isLoading = false) }
         }
-
     }
 
 

@@ -27,7 +27,7 @@ fun SignupPasswordField(
 ) {
     OutlinedTextField(
         value = uiState.password,
-        onValueChange = { onAction(SignUpContract.UiAction.OnPasswordChange(it)) },
+        onValueChange = { onAction(SignUpContract.UiAction.OnFormChange(password = it)) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),

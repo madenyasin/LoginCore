@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.gms)
     alias(libs.plugins.hilt)
+    kotlin("plugin.serialization") version libs.versions.kotlin
     id("kotlin-kapt")
 }
 
@@ -44,6 +45,11 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.supabase.bom))
+    implementation(libs.supabase.postgrest.kt)
+    implementation(libs.supabase.storage.kt)
+    implementation(libs.ktor.client.android)
+
     implementation(libs.coil.compose)
     implementation(libs.coil3.coil.network.okhttp)
 
