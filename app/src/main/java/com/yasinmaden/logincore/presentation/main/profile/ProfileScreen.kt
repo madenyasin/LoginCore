@@ -162,7 +162,9 @@ fun ProfileCard(
                 }
 
                 IconButton(
-                    onClick = { },
+                    onClick = {
+                        // TODO: Edit profile picture
+                    },
                     modifier = Modifier
                         .size(24.dp)
                         .align(Alignment.BottomEnd)
